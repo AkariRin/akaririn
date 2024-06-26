@@ -3,10 +3,10 @@
 <table>
   <tr>
     <td>
-      <img align="center" src="https://github-readme-stats.rbq.dev/api?username=AkariRin&count_private=true&show_icons=true&hide_border=true" />
+      <img align="center" src="https://github-readme-stats.vercel.app/api?username=AkariRin&count_private=true&show_icons=true&hide_border=true" />
     </td>
     <td>
-      <img align="center" src="https://github-readme-stats.rbq.dev/api/top-langs/?username=AkariRin&count_private=true&hide=hack&layout=compact&hide_border=true" />
+      <img align="center" src="https://github-readme-stats.vercel.app/api/top-langs/?username=AkariRin&count_private=true&hide=hack&layout=compact&hide_border=true" />
     </td>   
   </tr>
 </table>
