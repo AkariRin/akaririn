@@ -19,7 +19,7 @@
             <div class="label-section">
               <div class="label-header">语言</div>
               <v-chip size="small" label prepend-icon="mdi-translate">简体中文</v-chip>
-              <v-chip size="small" label>English</v-chip>
+              <v-chip size="small" label prepend-icon="mdi-alphabetical-variant">English</v-chip>
             </div>
             <div class="label-section">
               <div class="label-header">技术栈</div>
@@ -29,6 +29,15 @@
               <v-chip size="small" label prepend-icon="mdi-language-python" class="chip-python">Python</v-chip>
               <v-chip size="small" label prepend-icon="mdi-language-typescript" class="chip-typescript">TypeScript</v-chip>
               <v-chip size="small" label prepend-icon="mdi-vuejs" class="chip-vue">Vue</v-chip>
+            </div>
+            <div class="label-section">
+              <div class="label-header">开发工具</div>
+              <v-chip size="small" label prepend-icon="" class="chip-clion">CLion</v-chip>
+              <v-chip size="small" label prepend-icon="" class="chip-datagrip">DataGrip</v-chip>
+              <v-chip size="small" label prepend-icon="" class="chip-idea">IntelliJ IDEA</v-chip>
+              <v-chip size="small" label prepend-icon="" class="chip-pycharm">PyCharm</v-chip>
+              <v-chip size="small" label prepend-icon="mdi-microsoft-visual-studio-code" class="chip-vscode">VSCode</v-chip>
+              <v-chip size="small" label prepend-icon="" class="chip-webstorm">WebStorm</v-chip>
             </div>
             <div class="label-section">
               <div class="label-header">操作系统</div>
@@ -307,6 +316,36 @@ import bgImage from '@/assets/bg.jpg';
 
 :deep(.chip-vue) {
   background-color: #42B883 !important;
+  color: white !important;
+}
+
+:deep(.chip-clion) {
+  background-color: #087CFA !important;
+  color: white !important;
+}
+
+:deep(.chip-datagrip) {
+  background-color: #21D789 !important;
+  color: white !important;
+}
+
+:deep(.chip-idea) {
+  background-color: #F97603 !important;
+  color: white !important;
+}
+
+:deep(.chip-pycharm) {
+  background-color: #087CFA !important;
+  color: white !important;
+}
+
+:deep(.chip-vscode) {
+  background-color: #007ACC !important;
+  color: white !important;
+}
+
+:deep(.chip-webstorm) {
+  background-color: #087CFA !important;
   color: white !important;
 }
 
