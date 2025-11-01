@@ -109,6 +109,17 @@
                   <span class="label">邮箱</span>
                   <span class="ml-2 fake-link">akaririn1028@gmail.com</span>
                 </v-list-item>
+                <v-list-item
+                  href="https://akari/blog"
+                  target="_blank"
+                  class="identity-link"
+                >
+                  <template v-slot:prepend>
+                    <!-- TODO:这里的图标换成博客的favicon -->
+                    <v-icon size="small">mdi-tag</v-icon>
+                  </template>
+                  <span class="ml-2 fake-link">梦清の小窝</span>
+                </v-list-item>
               </v-list>
               <v-list>
                 <v-list-item class="section-list-header">
@@ -258,6 +269,7 @@
       </v-card>
       <v-card class="elevation-16 mt-2 mb-6" flat>
         <v-card-text>
+          <!-- TODO:这里的图标换成Akari Network的logo -->
           <v-btn
             variant="text"
             href="https://akari.moe/"
@@ -272,7 +284,7 @@
             variant="text"
             href="https://status.akari.moe/"
             target="_blank"
-            prepend-icon="mdi-network"
+            prepend-icon="mdi-server-network"
             class="mb-2"
           >
             <span class="link ml-2">Service Status/</span>
