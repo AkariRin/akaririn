@@ -94,9 +94,9 @@
               <v-list>
                 <v-list-item class="section-list-header">
                   <template v-slot:prepend>
-                    <v-icon size="small">mdi-contacts</v-icon>
+                    <v-icon size="small">mdi-tag</v-icon>
                   </template>
-                  联系方式
+                  关于我
                 </v-list-item>
                 <v-list-item
                   href="mailto:akaririn1028@gmail.com"
@@ -132,8 +132,12 @@
                   href="https://wakatime.com/@akari"
                   target="_blank"
                   class="identity-link"
+                  style="display: flex; align-items: center;"
                 >
-                  <img src="https://wakatime.com/badge/user/40464278-56b3-4816-a5f6-c6bd962b7279.svg?style=for-the-badge" />
+                  <img
+                    src="https://wakatime.com/badge/user/40464278-56b3-4816-a5f6-c6bd962b7279.svg?style=for-the-badge"
+                    style="display: block;"
+                  />
                 </v-list-item>
                 <v-list-item
                   href="https://hub.docker.com/u/akaririn"
@@ -264,7 +268,6 @@
             Running on Akari Network
             <span class="link ml-2">//akari.moe/</span>
           </v-btn>
-          <v-spacer></v-spacer>
           <v-btn
             variant="text"
             href="https://status.akari.moe/"
@@ -272,7 +275,7 @@
             prepend-icon="mdi-network"
             class="mb-2"
           >
-            <span class="link ml-2">Service Monitor/</span>
+            <span class="link ml-2">Service Status/</span>
           </v-btn>
           <v-divider class="my-2"></v-divider>
           <div class="copyright-text">
@@ -406,6 +409,7 @@ import WebStormIcon from '@/assets/icons/WebStorm_icon.svg';
 .identity-link:hover {
   background-color: rgba(1, 105, 124, 0.05);
 }
+
 
 .label {
   font-weight: 500;
