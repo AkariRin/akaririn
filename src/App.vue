@@ -32,12 +32,37 @@
             </div>
             <div class="label-section">
               <div class="label-header">开发工具</div>
-              <v-chip size="small" label prepend-icon="" class="chip-clion">CLion</v-chip>
-              <v-chip size="small" label prepend-icon="" class="chip-datagrip">DataGrip</v-chip>
-              <v-chip size="small" label prepend-icon="" class="chip-idea">IntelliJ IDEA</v-chip>
-              <v-chip size="small" label prepend-icon="" class="chip-pycharm">PyCharm</v-chip>
+              <v-chip size="small" label class="chip-clion">
+                <template v-slot:prepend>
+                  <img :src="CLionIcon" alt="CLion" class="ide-icon" />
+                </template>
+                CLion
+              </v-chip>
+              <v-chip size="small" label class="chip-datagrip">
+                <template v-slot:prepend>
+                  <img :src="DataGripIcon" alt="DataGrip" class="ide-icon" />
+                </template>
+                DataGrip
+              </v-chip>
+              <v-chip size="small" label class="chip-idea">
+                <template v-slot:prepend>
+                  <img :src="IntelliJIDEAIcon" alt="IntelliJ IDEA" class="ide-icon" />
+                </template>
+                IntelliJ IDEA
+              </v-chip>
+              <v-chip size="small" label class="chip-pycharm">
+                <template v-slot:prepend>
+                  <img :src="PyCharmIcon" alt="PyCharm" class="ide-icon" />
+                </template>
+                PyCharm
+              </v-chip>
               <v-chip size="small" label prepend-icon="mdi-microsoft-visual-studio-code" class="chip-vscode">VSCode</v-chip>
-              <v-chip size="small" label prepend-icon="" class="chip-webstorm">WebStorm</v-chip>
+              <v-chip size="small" label class="chip-webstorm">
+                <template v-slot:prepend>
+                  <img :src="WebStormIcon" alt="WebStorm" class="ide-icon" />
+                </template>
+                WebStorm
+              </v-chip>
             </div>
             <div class="label-section">
               <div class="label-header">操作系统</div>
@@ -153,6 +178,11 @@
 
 <script setup lang="ts">
 import bgImage from '@/assets/bg.jpg';
+import CLionIcon from '@/assets/icons/CLion_icon.svg';
+import DataGripIcon from '@/assets/icons/DataGrip_icon.svg';
+import IntelliJIDEAIcon from '@/assets/icons/IntelliJ_IDEA_icon.svg';
+import PyCharmIcon from '@/assets/icons/PyCharm_icon.svg';
+import WebStormIcon from '@/assets/icons/WebStorm_icon.svg';
 </script>
 
 <style scoped>
@@ -287,6 +317,13 @@ import bgImage from '@/assets/bg.jpg';
 
 :deep(.v-chip) {
   margin: 4px;
+}
+
+:deep(.ide-icon) {
+  width: 1.2em;
+  height: 1.2em;
+  object-fit: contain;
+  margin-right: 0.5em;
 }
 
 :deep(.chip-cpp) {
