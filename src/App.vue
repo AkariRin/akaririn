@@ -77,6 +77,104 @@
       </v-card>
       <v-card class="elevation-16 mt-6 mb-6" flat>
         <v-card-title class="section-title">
+          <v-icon class="mr-2" size="small">mdi-greater-than</v-icon>
+          Who am I?
+        </v-card-title>
+        <v-card-text>
+          <v-row>
+            <v-col md="6" xs="12">
+              <p class="section-paragraph">
+                也许我们该重新认识一下了，你好，我叫梦清
+              </p>
+              <p class="section-paragraph">
+                WIP
+              </p>
+            </v-col>
+            <v-col md="6" xs="12">
+              <v-list>
+                <v-list-item class="section-list-header">
+                  <template v-slot:prepend>
+                    <v-icon size="small">mdi-contacts</v-icon>
+                  </template>
+                  联系方式
+                </v-list-item>
+                <v-list-item
+                  href="mailto:akaririn1028@gmail.com"
+                  target="_blank"
+                  class="identity-link"
+                >
+                  <template v-slot:prepend>
+                    <v-icon size="small">mdi-gmail</v-icon>
+                  </template>
+                  <span class="label">邮箱</span>
+                  <span class="ml-2 fake-link">akaririn1028@gmail.com</span>
+                </v-list-item>
+              </v-list>
+              <v-list>
+                <v-list-item class="section-list-header">
+                  <template v-slot:prepend>
+                    <v-icon size="small">mdi-open-source-initiative</v-icon>
+                  </template>
+                  开源
+                </v-list-item>
+                <v-list-item
+                  href="https://github.com/AkariRin"
+                  target="_blank"
+                  class="identity-link"
+                >
+                  <template v-slot:prepend>
+                    <v-icon size="small">mdi-github</v-icon>
+                  </template>
+                  <span class="label">GitHub</span>
+                  <span class="ml-2 fake-link">梦清</span>
+                </v-list-item>
+                <v-list-item
+                  href="https://wakatime.com/@akari"
+                  target="_blank"
+                  class="identity-link"
+                >
+                  <img src="https://wakatime.com/badge/user/40464278-56b3-4816-a5f6-c6bd962b7279.svg?style=for-the-badge" />
+                </v-list-item>
+                <v-list-item
+                  href="https://hub.docker.com/u/akaririn"
+                  target="_blank"
+                  class="identity-link"
+                >
+                  <template v-slot:prepend>
+                    <v-icon size="small">mdi-docker</v-icon>
+                  </template>
+                  <span class="label">Docker Hub</span>
+                  <span class="ml-2 fake-link">Akari Rin</span>
+                </v-list-item>
+                <v-list-item
+                  href="https://pypi.org/user/akaririn/"
+                  target="_blank"
+                  class="identity-link"
+                >
+                  <template v-slot:prepend>
+                    <v-icon size="small">mdi-language-python</v-icon>
+                  </template>
+                  <span class="label">PyPI</span>
+                  <span class="ml-2 fake-link">Akari Rin</span>
+                </v-list-item>
+                <v-list-item
+                  href="https://www.npmjs.com/~akaririn"
+                  target="_blank"
+                  class="identity-link"
+                >
+                  <template v-slot:prepend>
+                    <v-icon size="small">mdi-npm</v-icon>
+                  </template>
+                  <span class="label">npm</span>
+                  <span class="ml-2 fake-link">Akari Rin</span>
+                </v-list-item>
+              </v-list>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+      <v-card class="elevation-16 mt-6 mb-6" flat>
+        <v-card-title class="section-title">
           <v-icon class="mr-2" size="small">mdi-controller</v-icon>
           NO GAME NO LIFE
         </v-card-title>
@@ -163,8 +261,18 @@
             prepend-icon="mdi-server-network"
             class="mb-2"
           >
-            Hosted by Akari Network
+            Running on Akari Network
             <span class="link ml-2">//akari.moe/</span>
+          </v-btn>
+          <v-spacer></v-spacer>
+          <v-btn
+            variant="text"
+            href="https://status.akari.moe/"
+            target="_blank"
+            prepend-icon="mdi-network"
+            class="mb-2"
+          >
+            <span class="link ml-2">Service Monitor/</span>
           </v-btn>
           <v-divider class="my-2"></v-divider>
           <div class="copyright-text">
