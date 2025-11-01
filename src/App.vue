@@ -27,6 +27,7 @@
               <v-chip size="small" label prepend-icon="mdi-language-java" class="chip-java">Java</v-chip>
               <v-chip size="small" label prepend-icon="mdi-language-javascript" class="chip-javascript">JavaScript</v-chip>
               <v-chip size="small" label prepend-icon="mdi-language-python" class="chip-python">Python</v-chip>
+              <v-chip size="small" label prepend-icon="mdi-language-java" class="chip-spring">Spring</v-chip>
               <v-chip size="small" label prepend-icon="mdi-language-typescript" class="chip-typescript">TypeScript</v-chip>
               <v-chip size="small" label prepend-icon="mdi-vuejs" class="chip-vue">Vue</v-chip>
             </div>
@@ -477,6 +478,11 @@ import WebStormIcon from '@/assets/icons/WebStorm_icon.svg';
 
 :deep(.chip-vue) {
   background-color: #42B883 !important;
+  color: white !important;
+}
+
+:deep(.chip-spring) {
+  background-color: #6DB33F !important;
   color: white !important;
 }
 
