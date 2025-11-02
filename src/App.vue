@@ -11,9 +11,7 @@
           <v-col md="8" xs="12" class="info-section">
             <div class="name-container">
               <h1 class="profile-name">
-                <span class="no-wrap">
-                  梦清 | Akari Rin
-                </span>
+                <span class="no-wrap">梦清 | Akari Rin</span>
               </h1>
             </div>
             <div class="label-section">
@@ -24,9 +22,15 @@
             <div class="label-section">
               <div class="label-header">技术栈</div>
               <v-chip size="small" label prepend-icon="mdi-language-cpp" class="chip-cpp">C++</v-chip>
+              <v-chip size="small" label prepend-icon="mdi-cloud" class="chip-cloudflare">Cloudflare</v-chip>
+              <v-chip size="small" label prepend-icon="mdi-docker" class="chip-docker">Docker</v-chip>
               <v-chip size="small" label prepend-icon="mdi-language-java" class="chip-java">Java</v-chip>
               <v-chip size="small" label prepend-icon="mdi-language-javascript" class="chip-javascript">JavaScript</v-chip>
+              <v-chip size="small" label prepend-icon="mdi-kubernetes" class="chip-kubernetes">Kubenetes</v-chip>
+              <v-chip size="small" label prepend-icon="mdi-database" class="chip-mysql">MySQL</v-chip>
+              <v-chip size="small" label prepend-icon="mdi-database" class="chip-postgresql">PostgreSQL</v-chip>
               <v-chip size="small" label prepend-icon="mdi-language-python" class="chip-python">Python</v-chip>
+              <v-chip size="small" label prepend-icon="mdi-database" class="chip-redis">Redis</v-chip>
               <v-chip size="small" label prepend-icon="mdi-language-java" class="chip-spring">Spring</v-chip>
               <v-chip size="small" label prepend-icon="mdi-language-typescript" class="chip-typescript">TypeScript</v-chip>
               <v-chip size="small" label prepend-icon="mdi-vuejs" class="chip-vue">Vue</v-chip>
@@ -35,43 +39,43 @@
               <div class="label-header">开发工具</div>
               <v-chip size="small" label class="chip-clion">
                 <template v-slot:prepend>
-                  <img :src="CLionIcon" alt="CLion" class="ide-icon" />
+                  <img :src="CLionIcon" class="ide-icon" />
                 </template>
                 CLion
               </v-chip>
               <v-chip size="small" label class="chip-datagrip">
                 <template v-slot:prepend>
-                  <img :src="DataGripIcon" alt="DataGrip" class="ide-icon" />
+                  <img :src="DataGripIcon" class="ide-icon" />
                 </template>
                 DataGrip
               </v-chip>
               <v-chip size="small" label class="chip-idea">
                 <template v-slot:prepend>
-                  <img :src="IntelliJIDEAIcon" alt="IntelliJ IDEA" class="ide-icon" />
+                  <img :src="IntelliJIDEAIcon" class="ide-icon" />
                 </template>
                 IntelliJ IDEA
               </v-chip>
               <v-chip size="small" label class="chip-pycharm">
                 <template v-slot:prepend>
-                  <img :src="PyCharmIcon" alt="PyCharm" class="ide-icon" />
+                  <img :src="PyCharmIcon" class="ide-icon" />
                 </template>
                 PyCharm
               </v-chip>
               <v-chip size="small" label prepend-icon="mdi-microsoft-visual-studio-code" class="chip-vscode">VSCode</v-chip>
               <v-chip size="small" label class="chip-webstorm">
                 <template v-slot:prepend>
-                  <img :src="WebStormIcon" alt="WebStorm" class="ide-icon" />
+                  <img :src="WebStormIcon" class="ide-icon" />
                 </template>
                 WebStorm
               </v-chip>
             </div>
             <div class="label-section">
               <div class="label-header">操作系统</div>
+              <v-chip size="small" label prepend-icon="mdi-microsoft-windows" class="chip-windows">10</v-chip>
               <v-chip size="small" label prepend-icon="mdi-microsoft-windows" class="chip-windows">11</v-chip>
               <v-chip size="small" label prepend-icon="mdi-apple" class="chip-ios">iOS</v-chip>
               <v-chip size="small" label prepend-icon="mdi-apple" class="chip-ipados">iPadOS</v-chip>
-              <v-chip size="small" label prepend-icon="mdi-linux" class="chip-linux">Debian 13</v-chip>
-              <v-chip size="small" label prepend-icon="mdi-kubernetes" class="chip-kubernetes">Kubenetes</v-chip>
+              <v-chip size="small" label prepend-icon="mdi-debian" class="chip-debian">Debian 13</v-chip>
             </div>
           </v-col>
         </v-row>
@@ -521,7 +525,7 @@ import WebStormIcon from '@/assets/icons/WebStorm_icon.svg';
   color: white !important;
 }
 
-:deep(.chip-linux) {
+:deep(.chip-debian) {
   background-color: #FCC624 !important;
   color: #333 !important;
 }
@@ -536,8 +540,33 @@ import WebStormIcon from '@/assets/icons/WebStorm_icon.svg';
   color: white !important;
 }
 
-:deep(.chip-ipados) {
+:deep(.chip-ipads) {
   background-color: #000000 !important;
+  color: white !important;
+}
+
+:deep(.chip-cloudflare) {
+  background-color: #F38020 !important;
+  color: white !important;
+}
+
+:deep(.chip-docker) {
+  background-color: #2496ED !important;
+  color: white !important;
+}
+
+:deep(.chip-mysql) {
+  background-color: #00758F !important;
+  color: white !important;
+}
+
+:deep(.chip-postgresql) {
+  background-color: #336791 !important;
+  color: white !important;
+}
+
+:deep(.chip-redis) {
+  background-color: #DC382D !important;
   color: white !important;
 }
 
