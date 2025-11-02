@@ -420,6 +420,8 @@ import WebStormIcon from '@/assets/icons/WebStorm_icon.svg';
   font-weight: 300;
   line-height: 1.75em;
   margin: 1em 0;
+  border-left: 4px solid #333;
+  padding-left: 15px;
 }
 
 .section-list-header {
