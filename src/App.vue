@@ -74,7 +74,7 @@
               <v-chip size="small" label prepend-icon="mdi-microsoft-windows" class="chip-windows">10</v-chip>
               <v-chip size="small" label prepend-icon="mdi-microsoft-windows" class="chip-windows">11</v-chip>
               <v-chip size="small" label prepend-icon="mdi-apple" class="chip-ios">iOS</v-chip>
-              <v-chip size="small" label prepend-icon="mdi-apple" class="chip-ipados">iPadOS</v-chip>
+              <v-chip size="small" label prepend-icon="mdi-apple" class="chip-ios">iPadOS</v-chip>
               <v-chip size="small" label prepend-icon="mdi-debian" class="chip-debian">Debian 13</v-chip>
             </div>
           </v-col>
@@ -124,6 +124,18 @@
                     <v-icon size="small">mdi-tag</v-icon>
                   </template>
                   <span class="ml-2 fake-link">梦清の小窝</span>
+                </v-list-item>
+                <v-list-item
+                  href="https://afdian.com/a/akaririn"
+                  target="_blank"
+                  class="identity-link"
+                  style="display: flex; align-items: center;"
+                >
+                  <img
+                    width="150"
+                    style="display: block;"
+                    src="https://pic1.afdiancdn.com/static/img/welcome/button-sponsorme.png"
+                  />
                 </v-list-item>
               </v-list>
               <v-list>
@@ -536,11 +548,6 @@ import WebStormIcon from '@/assets/icons/WebStorm_icon.svg';
 }
 
 :deep(.chip-ios) {
-  background-color: #000000 !important;
-  color: white !important;
-}
-
-:deep(.chip-ipads) {
   background-color: #000000 !important;
   color: white !important;
 }
