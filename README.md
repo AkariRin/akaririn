@@ -16,5 +16,6 @@
 
 # Sponsorship
 
-<iframe id="afdian_leaflet_akaririn" src="https://afdian.com/leaflet?slug=akaririn" width="100%" scrolling="no" height="200" frameborder="0"></iframe>
-<script>document.body.clientWidth< 700 ? document.getElementById("afdian_leaflet_akaririn").width = "100%" : document.getElementById("afdian_leaflet_akaririn").width = "640"</script>
+<a href="https://afdian.com/a/akaririn">
+  <img width="200" src="https://pic1.afdiancdn.com/static/img/welcome/button-sponsorme.png" alt="" />
+</a>
