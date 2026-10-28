@@ -83,7 +83,7 @@
     "remark-sectionize": "^2.1.0",
     "sanitize-html": "^2.18.0",
     "satteri": "^0.10.5",
-    "sharp": "^0.35.4",
+    "sharp": "^0.35.5",
     "stylus": "^0.64.0",
     "svelte": "^5.57.0",
     "tailwindcss": "^4.3.3",
