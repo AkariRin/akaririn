@@ -54,14 +54,7 @@ export const siteConfig: SiteConfig = {
 	description: "欲买桂花同载酒，终不似，少年游。",
 
 	// 站点关键词
-	keywords: [
-		"梦清",
-		"博客",
-		"技术博客",
-		"Linux",
-		"Docker",
-		"Minecraft",
-	],
+	keywords: ["梦清", "博客", "技术博客", "Linux", "Docker", "Minecraft"],
 
 	// 主题色
 	themeColor: {
