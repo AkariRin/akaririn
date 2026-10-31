@@ -44,6 +44,4 @@ package/
 .obsidian/
 
 # vibe coding
-.codex*
-.claude
-.mimocode
+.playwright-mcp
