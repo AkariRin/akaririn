@@ -2,7 +2,7 @@ import type { AnalyticsConfig } from "../types/analyticsConfig";
 
 export const analyticsConfig: AnalyticsConfig = {
 	// Google Analytics ID
-	googleAnalyticsId: "",
+	googleAnalyticsId: "G-KJ8DC5TNCQ",
 	// Microsoft Clarity ID
 	microsoftClarityId: "",
 	// Umami 统计配置
@@ -14,7 +14,7 @@ export const analyticsConfig: AnalyticsConfig = {
 		// Umami 会话回放脚本地址，支持使用自建
 		replaysScriptUrl: "https://cloud.umami.is/recorder.js",
 		// 是否追踪出站链接
-		trackOutboundLinks: true,
+		trackOutboundLinks: false,
 		// 是否收集浏览器性能指标
 		collectWebVitals: false,
 		// 会话回放配置
@@ -44,6 +44,6 @@ export const analyticsConfig: AnalyticsConfig = {
 		//  Hash路由模式, 项目使用History API路由, 所以不必开启默认false
 		hashMode: false,
 		// 是否开启网站录屏功能
-		screenRecord: true,
+		screenRecord: false,
 	},
 };
