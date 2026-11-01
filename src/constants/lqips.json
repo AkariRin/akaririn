@@ -8,8 +8,6 @@
   "src:assets/images/MobileWallpaper/m3.avif": "c2a6b4d9c1cad2c0c9",
   "src:assets/images/MobileWallpaper/m2.avif": "cad0c7bdc3b8ecd5cd",
   "src:assets/images/MobileWallpaper/m1.avif": "cbcce1cbc0d69295bf",
-  "src:assets/images/logo/firefly-light.png": "000000000000000000",
-  "src:assets/images/logo/firefly-dark.png": "ffffffffffffffffff",
   "src:assets/images/DesktopWallpaper/d6.avif": "d9e5ec9ca7aebda9b0",
   "src:assets/images/DesktopWallpaper/d5.avif": "e2dbe0e1dae1d9c9cd",
   "src:assets/images/DesktopWallpaper/d4.avif": "727991b7a7bbe2b8c2",
@@ -18,7 +16,6 @@
   "src:assets/images/DesktopWallpaper/d1.avif": "8b9bb59ba6bae7d7dd",
   "public:assets/images/ad/ad1.webp": "a1b8b68a8e918c8f93",
   "src:content/projects/images/firefly.avif": "b5b0b3bcb6bbe0e0df",
-  "src:assets/images/background.jpg": "5635384b2e32756466",
   "src:assets/images/logo/texas.png": "abacb1bebec2989ca2",
   "src:content/posts/images/endfield-beta-local-server-8.png": "141414141414101010",
   "src:content/posts/images/endfield-beta-local-server-7.png": "f2f3f4fcfbfbf8f9fa",
@@ -27,5 +24,6 @@
   "src:content/posts/images/endfield-beta-local-server-4.png": "f4f5f4f7f6f7f9f9f9",
   "src:content/posts/images/endfield-beta-local-server-3.png": "c3b7afb8b2ae5b5353",
   "src:content/posts/images/endfield-beta-local-server-2.png": "25313e06040d2f4358",
-  "src:content/posts/images/endfield-beta-local-server-1.png": "dcded5d9dbdce1e1db"
+  "src:content/posts/images/endfield-beta-local-server-1.png": "dcded5d9dbdce1e1db",
+  "src:assets/images/background.jpg": "ebdde7706777877d8c"
 }
