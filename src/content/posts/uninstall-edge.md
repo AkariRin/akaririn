@@ -1,7 +1,7 @@
 ---
 title: "微软Edge浏览器卸载教程"
 published: 2025-03-17T14:30:46+08:00
-description: "萝卜青菜各有所爱，浏览器亦是如此。很不幸，微软剥夺了我们喜欢其他浏览器Chrome的权利，让我们无法通过常规途径卸载Edge，但是我们仍然能通过修改注册表等奇技淫巧将Edge卸载"
+description: "Windows 没有提供卸载 Edge 的常规入口。本文借助开源工具 Remove-MS-Edge 一键卸载，并说明 webview 组件被哪些软件依赖，以及卸载后可能引发的系统更新失败循环。"
 tags: [Edge]
 category: "教程"
 image: ""

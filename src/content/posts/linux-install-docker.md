@@ -1,7 +1,7 @@
 ---
 title: "Linux系统快速安装Docker环境"
 published: 2024-08-15T19:04:34+08:00
-description: "本教程讲解如何使用Docker官方提供的docker-install脚本在Linux系统上快速安装Docker环境"
+description: "本文介绍用 Docker 官方 docker-install 脚本快速安装 Docker，覆盖海外直连、阿里云公网镜像和云厂商内网镜像三种网络环境，以及指定版本与测试版通道的用法。"
 tags: [Docker, Linux, Debian]
 category: "教程"
 image: ""
