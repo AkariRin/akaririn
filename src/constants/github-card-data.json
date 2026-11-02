@@ -1,39 +1,33 @@
 {
-	"akaririn/aliyun-api-py": {
-		"description": "一个简单的阿里云API封装库",
-		"language": "Python",
-		"avatarUrl": "https://avatars.githubusercontent.com/u/45938285?v=4",
-		"license": "MIT"
-	},
-	"akaririn/lagrange-interpolation": {
-		"description": "基于Vue的拉格朗日插值函数生成器",
-		"language": "Vue",
-		"avatarUrl": "https://avatars.githubusercontent.com/u/45938285?v=4",
-		"license": "MIT"
-	},
-	"akaririn/pixiv-router": {
-		"description": "Pixiv导航工具",
-		"language": "Vue",
-		"avatarUrl": "https://avatars.githubusercontent.com/u/45938285?v=4",
-		"license": "MIT"
-	},
-	"cuteleaf/firefly": {
-		"description": "🍀Firefly, fresh and aesthetic Astro blog theme template. ",
-		"language": "Astro",
-		"avatarUrl": "https://avatars.githubusercontent.com/u/43440669?v=4",
-		"license": "MIT"
-	},
 	"docker/docker-install": {
 		"description": "Docker installation script",
 		"language": "Shell",
 		"avatarUrl": "https://avatars.githubusercontent.com/u/5429470?v=4",
 		"license": "Apache-2.0"
 	},
-	"saicaca/fuwari": {
-		"description": "✨A static blog template built with Astro. ",
-		"language": "Astro",
-		"avatarUrl": "https://avatars.githubusercontent.com/u/25200299?v=4",
-		"license": "MIT"
+	"keycloak/keycloak": {
+		"description": "Open Source Identity and Access Management For Modern Applications and Services",
+		"language": "Java",
+		"avatarUrl": "https://avatars.githubusercontent.com/u/4921466?v=4",
+		"license": "Apache-2.0"
+	},
+	"kite-org/kite": {
+		"description": "🪁 A lightweight, modern Kubernetes dashboard. All your clusters. One workspace.",
+		"language": "TypeScript",
+		"avatarUrl": "https://avatars.githubusercontent.com/u/263552704?v=4",
+		"license": "Apache-2.0"
+	},
+	"outline/outline": {
+		"description": "The fastest knowledge base for growing teams. Beautiful, realtime collaborative, feature packed, and markdown compatible.",
+		"language": "TypeScript",
+		"avatarUrl": "https://avatars.githubusercontent.com/u/1765001?v=4",
+		"license": "NOASSERTION"
+	},
+	"seaweedfs/seaweedfs": {
+		"description": "SeaweedFS is a distributed storage system for object storage (S3), file systems, Iceberg table buckets, and Lance vector buckets, designed to handle billions of files with O(1) disk access and effortless horizontal scaling.",
+		"language": "Go",
+		"avatarUrl": "https://avatars.githubusercontent.com/u/11985425?v=4",
+		"license": "Apache-2.0"
 	},
 	"shadowwhisperer/remove-ms-edge": {
 		"description": "Uninstall Microsoft Edge with a batch script.",
