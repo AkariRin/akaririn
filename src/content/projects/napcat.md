@@ -1,5 +1,5 @@
 ---
-title: "napcat"
+title: "Aemeath NapCat SDK"
 published: 2026-05-26
 description: "Aemeath NapCat SDK"
 status: "published"

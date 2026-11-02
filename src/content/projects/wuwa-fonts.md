@@ -1,5 +1,5 @@
 ---
-title: "wuwa-fonts"
+title: "Wuwa Fonts"
 published: 2026-06-26
 description: "鸣潮字体库"
 status: "published"
@@ -10,7 +10,7 @@ link:
     icon: "fa7-brands:github"
     value: "https://github.com/aemeath-projects/wuwa-fonts"
   - label: "npm"
-    icon: "material-symbols:package-2"
+    icon: "simple-icons:npm"
     value: "https://www.npmjs.com/package/@aemeath-projects/wuwa-fonts"
 ---
 

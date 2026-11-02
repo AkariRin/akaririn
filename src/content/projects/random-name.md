@@ -1,5 +1,5 @@
 ---
-title: "random-name"
+title: "随机点名器"
 published: 2022-07-24
 description: "随机点名器"
 status: "published"

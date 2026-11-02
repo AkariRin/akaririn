@@ -1,5 +1,5 @@
 ---
-title: "duoshe-plugin"
+title: "夺舍"
 published: 2026-01-07
 description: "麦麦插件：夺舍"
 status: "published"

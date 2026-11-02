@@ -1,5 +1,5 @@
 ---
-title: "onetrue-RAG"
+title: "onetrue RAG"
 published: 2025-12-11
 description: "用于训练赛博玩出的数据爬虫"
 status: "archived"

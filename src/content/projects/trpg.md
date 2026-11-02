@@ -1,5 +1,5 @@
 ---
-title: "trpg"
+title: "Aemeath TRPG Engine"
 published: 2026-07-25
 description: "TRPG 骰娘规则引擎：无状态掷骰求值、CoC 7/6 版与 D&D 5e 规则判定、人物生成公式、日志状态机等纯函数集合"
 status: "published"
@@ -14,7 +14,7 @@ link:
     icon: "fa7-brands:github"
     value: "https://github.com/aemeath-projects/trpg"
   - label: "npm"
-    icon: "material-symbols:package-2"
+    icon: "simple-icons:npm"
     value: "https://www.npmjs.com/package/@aemeath-projects/trpg"
 ---
 

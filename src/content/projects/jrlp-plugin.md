@@ -1,5 +1,5 @@
 ---
-title: "jrlp-plugin"
+title: "今日老婆"
 published: 2026-01-06
 description: "麦麦插件：今日老婆"
 status: "published"

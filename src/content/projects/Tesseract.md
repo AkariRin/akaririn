@@ -1,5 +1,5 @@
 ---
-title: "Tesseract"
+title: "Tesseract（超维立方）"
 published: 2025-12-03
 description: "超维立方"
 status: "published"

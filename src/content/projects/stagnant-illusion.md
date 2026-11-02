@@ -1,5 +1,5 @@
 ---
-title: "stagnant-illusion"
+title: "静滞虚幻"
 published: 2025-10-29
 description: "静滞虚幻"
 status: "published"

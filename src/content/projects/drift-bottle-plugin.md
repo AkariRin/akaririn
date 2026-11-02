@@ -1,5 +1,5 @@
 ---
-title: "drift-bottle-plugin"
+title: "漂流瓶"
 published: 2026-01-07
 description: "麦麦插件：漂流瓶"
 status: "published"

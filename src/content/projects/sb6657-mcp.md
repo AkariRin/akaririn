@@ -9,8 +9,8 @@ link:
   - label: "GitHub"
     icon: "fa7-brands:github"
     value: "https://github.com/aemeath-projects/sb6657-mcp"
-  - label: "主页"
-    icon: "material-symbols:link"
+  - label: "MCP"
+    icon: "simple-icons:modelcontextprotocol"
     value: "https://sb6657-mcp.aemeath.dev"
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: "bookshelf"
+title: "Bookshelf"
 published: 2026-07-24
 description: "Bookshelf：跑团日志阅读器"
 status: "published"

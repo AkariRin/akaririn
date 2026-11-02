@@ -1,5 +1,5 @@
 ---
-title: "bilibili"
+title: "Aemeath Bilibili SDK"
 published: 2026-06-04
 description: "Aemeath Bilibili SDK"
 status: "published"
@@ -11,7 +11,7 @@ link:
     icon: "fa7-brands:github"
     value: "https://github.com/aemeath-projects/bilibili"
   - label: "npm"
-    icon: "material-symbols:package-2"
+    icon: "simple-icons:npm"
     value: "https://www.npmjs.com/package/@aemeath-projects/bilibili"
 ---
 

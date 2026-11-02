@@ -1,5 +1,5 @@
 ---
-title: "pixiv-router"
+title: "Pixiv Router"
 published: 2022-08-11
 description: "Pixiv导航工具"
 status: "published"

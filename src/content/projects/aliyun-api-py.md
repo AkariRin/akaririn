@@ -1,5 +1,5 @@
 ---
-title: "aliyun-api-py"
+title: "Aliyun API Python"
 published: 2024-07-23
 description: "一个简单的阿里云API封装库"
 status: "archived"
@@ -10,7 +10,7 @@ link:
     icon: "fa7-brands:github"
     value: "https://github.com/AkariRin/aliyun-api-py"
   - label: "PyPI"
-    icon: "material-symbols:package-2"
+    icon: "simple-icons:pypi"
     value: "https://pypi.org/project/aliyun-api-py/"
 ---
 

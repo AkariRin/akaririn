@@ -1,5 +1,5 @@
 ---
-title: "exostrider"
+title: "Aemeath Exostrider"
 published: 2026-06-18
 description: "隧者：TypeScript 事件驱动框架，内置装饰器路由、服务生命周期编排、会话状态机、客户端池管理、消息与命令解析、env 配置中心与结构化日志"
 status: "archived"
@@ -17,7 +17,7 @@ link:
     icon: "fa7-brands:github"
     value: "https://github.com/aemeath-projects/exostrider"
   - label: "npm"
-    icon: "material-symbols:package-2"
+    icon: "simple-icons:npm"
     value: "https://www.npmjs.com/package/@aemeath-projects/exostrider"
 ---
 
