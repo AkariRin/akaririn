@@ -5,7 +5,7 @@ description: "Kite 是一个单二进制、界面现代的 Kubernetes 管理面�
 tags: [Kite, Kubernetes, Docker, 运维]
 category: "自托管"
 image: ""
-draft: true
+draft: false
 comment: true
 ---
 

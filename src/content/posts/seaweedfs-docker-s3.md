@@ -5,7 +5,7 @@ description: "SeaweedFS 是一个轻量的 S3 兼容对象存储。本文用 Doc
 tags: [SeaweedFS, S3, Docker, 对象存储]
 category: "自托管"
 image: ""
-draft: true
+draft: false
 comment: true
 ---
 

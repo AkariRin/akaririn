@@ -5,7 +5,7 @@ description: "Outline 是一个界面干净、支持 Markdown 的团队知识库
 tags: [Outline, Docker, Wiki, 知识库]
 category: "自托管"
 image: ""
-draft: true
+draft: false
 comment: true
 ---
 

@@ -7,7 +7,7 @@ category: "自托管"
 image: ""
 series: "Keycloak 实战"
 seriesOrder: 3
-draft: true
+draft: false
 comment: true
 ---
 
