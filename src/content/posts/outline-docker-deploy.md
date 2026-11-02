@@ -3,15 +3,17 @@ title: "用 Docker Compose 部署 Outline 知识库"
 published: 2026-09-02T23:41:34+08:00
 description: "Outline 是一个界面干净、支持 Markdown 的团队知识库。本文用 Docker Compose 搭一套完整实例：PostgreSQL、Redis、S3 兼容存储、邮件与可选的 OIDC 登录，并整理附件上传、数据库迁移这些容易卡住的地方。"
 tags: [Outline, Docker, Wiki, 知识库]
-category: "教程"
+category: "自托管"
 image: ""
 draft: true
 comment: true
 ---
 
-团队文档最常见的归宿是聊天记录和网盘：找起来靠关键词，权限靠自觉，版本靠文件名。自建知识库的价值不在于「有一个 Wiki」，而在于把文档、附件、搜索、权限和备份放进同一套可掌控的边界里。
+团队文档最常见的归宿是聊天记录和网盘：找起来靠关键词，权限靠自觉，版本靠文件名。自建知识库的价值不在于「有一个 Wiki」，而在于把文档、附件、搜索、权限和备份放进同一套可掌控的范围里。
 
 Outline 的定位是团队 Wiki。它的编辑器支持 Markdown 语法和 `/` 快捷插入，支持实时协作、层级文档、集合与权限，界面比 Wiki.js 更接近现代 SaaS，部署复杂度又比 Confluence 低得多。和 Docmost 相比，Outline 的生态更成熟，S3 附件、OIDC、邮件这些外围能力都有明确的环境变量入口。本文用 Docker Compose 搭一套能真正跑起来的实例，重点处理三件容易出问题的事：数据库迁移、第一个管理员、附件直传 S3。
+
+::github{repo="outline/outline"}
 
 ## 依赖与整体结构
 
@@ -34,7 +36,7 @@ flowchart LR
 - **minio**：S3 兼容对象存储，存附件。桶名 `outline`。
 - **mailpit**：仅用于本地测试邮件，不接真实服务商。生产环境删掉这个服务，换成真实 SMTP 参数即可。
 
-MinIO 在 2025 年调整了镜像分发，`minio/minio` 在 Docker Hub 上已经无法直接拉取。我这次用的是 Bitnami 归档的 `bitnamilegacy/minio:2025.4.22`，功能等价，而且支持用 `MINIO_DEFAULT_BUCKETS` 在启动时自动建桶。如果你从其他镜像源拿到官方镜像，把镜像行换掉，再手动执行 `mc mb` 建桶即可。S3 端也可以换成 SeaweedFS，只要保持 path-style 和浏览器可达的 bucket URL，本文不展开。
+MinIO 在 2025 年调整了镜像分发，`minio/minio` 在 Docker Hub 上已经无法直接拉取。这次用的是 Bitnami 归档的 `bitnamilegacy/minio:2025.4.22`，功能等价，而且支持用 `MINIO_DEFAULT_BUCKETS` 在启动时自动建桶。如果你从其他镜像源拿到官方镜像，把镜像行换掉，再手动执行 `mc mb` 建桶即可。S3 端也可以换成 SeaweedFS，只要保持 path-style 和浏览器可达的 bucket URL，本文不展开。
 
 端口方面，为了不和本机其他服务冲突，示例统一做了偏移：Outline `13000`、PostgreSQL `15433`、Redis `16379`、MinIO `19011/19012`、Mailpit `18035/11035`。生产环境通常只需要暴露 Outline 的 3000（或反代后的 443），数据库和对象存储走内网。
 
@@ -385,15 +387,4 @@ docker compose logs -f outline
 
 Outline 适合小团队或 homelab：一台 2C4G 的机器、一块 SSD、PostgreSQL 和 MinIO 各一份持久卷就能跑起来。它的资源开销主要来自 Node 进程和 PostgreSQL，附件多了之后要给对象存储留足空间。
 
-这套部署的难点不在容器数量，而在三个边界：迁移必须手动串在启动命令里，并且要绕开 production 的 SSL 配置；登录依赖邮件，SMTP 不能省；附件是浏览器直传，S3 地址必须从浏览器视角配置。把这三处验证清楚，剩下的就是常规的备份和升级。
-
----
-
-## 验证记录
-
-- 验证日期：2026-09-02
-- 实际镜像：`outlinewiki/outline:1.12.0`、`postgres:16-alpine`（16.15）、`redis:7-alpine`（7.4.12）、`bitnamilegacy/minio:2025.4.22`、`axllent/mailpit:v1.33.0`
-- Compose 路径：本地验证目录下的 `compose.yaml`
-- 已跑通：五个容器启动并 healthy；312 条迁移记录（`SequelizeMeta`）；首次 setup 创建管理员（角色 `admin`）；Mailpit 收到 `Welcome to Outline!`；编辑器上传图片时 `POST http://localhost:19011/outline` 返回 204，桶内出现对象；刷新后 `/api/attachments.redirect` 302 到 MinIO 预签名 GET 并返回 200。
-- 未实测/降级：OIDC 接入未在本环境实测；HTTPS 反向代理未实测，文中协议与回调相关建议按环境变量语义给出；MinIO 官方镜像当前无法直接拉取，改用 Bitnami 归档镜像。
-- 截图：`outline-docker-deploy-1.png` 至 `-4.png` 为自动截图；终端输出已以文本形式附在正文。
+这套部署的难点不在容器数量，而在三件事：迁移必须手动串在启动命令里，并且要绕开 production 的 SSL 配置；登录依赖邮件，SMTP 不能省；附件是浏览器直传，S3 地址必须从浏览器视角配置。把这三处验证清楚，剩下的就是常规的备份和升级。

@@ -3,7 +3,7 @@ title: "Debian使用Nginx官方源通过包管理器安装Nginx"
 published: 2024-08-15T23:29:22+08:00
 description: "Debian 系统源里的 Nginx 版本往往比官方 release 落后许多。本文通过 Nginx 官方 apt 源安装最新版：导入签名密钥、配置软件源与优先级，不用像常见教程那样编译安装，对低性能机器和边缘节点更友好。"
 tags: [Nginx, apt, Debian]
-category: "教程"
+category: ""
 image: ""
 draft: false
 comment: true

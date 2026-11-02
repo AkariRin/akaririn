@@ -3,7 +3,7 @@ title: "把自建服务接上 Keycloak：OIDC 客户端配置清单"
 published: 2026-08-22T23:52:27+08:00
 description: "自建服务多了以后，每个服务一套账号很难管理。本文讲清 Keycloak 里 OIDC client 的每个关键字段，以及回调地址、组映射、token 校验、登出这些最容易踩坑的地方，并以一个真实服务为例走完整流程。"
 tags: [Keycloak, OIDC, SSO, Docker]
-category: "教程"
+category: "自托管"
 image: ""
 series: "Keycloak 实战"
 seriesOrder: 2

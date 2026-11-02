@@ -3,7 +3,7 @@ title: "Kite：用 Docker 部署一个轻量的 Kubernetes 管理面板"
 published: 2026-10-22T03:58:18+08:00
 description: "Kite 是一个单二进制、界面现代的 Kubernetes 管理面板。本文用 Docker Compose 部署 Kite 与它的 PostgreSQL，接入一个已有集群，并整理 OIDC 登录、监控接入和插件这些实际会用到的配置。"
 tags: [Kite, Kubernetes, Docker, 运维]
-category: "教程"
+category: "自托管"
 image: ""
 draft: true
 comment: true
@@ -12,6 +12,8 @@ comment: true
 homelab 里只跑一两个集群时，`kubectl` 仍然是最快的工具。但有几类操作在终端里始终别扭：翻某个 Namespace 下的工作负载、按关键字过滤容器日志、临时进容器执行一条命令、看一眼节点还剩多少资源。每次都要回忆 `-n`、label selector 和 `kubectl logs -f` 的参数，时间久了对集群的直观感受也会变淡。
 
 Kite 解决的就是这部分需求。它是一个用 Go 写的单进程 Web 服务，自己跑在集群外面，靠一份 kubeconfig（或集群内的 ServiceAccount）连接已有的 Kubernetes 集群，把工作负载、日志、事件、终端和资源关系放进浏览器。和 Rancher 这类平台相比，它不需要往被管集群里装一整套控制器；和 Lens、Headlamp 这类桌面客户端相比，它开一个浏览器就能用，适合放在内网当常驻面板。
+
+::github{repo="kite-org/kite"}
 
 ## Kite 是什么、不是什么
 
@@ -52,7 +54,7 @@ Kite 容器起来后还要把它接到 kind 的 Docker 网络，这一步放在�
 
 ## 用 Compose 部署
 
-Kite 的官方镜像发布在 `ghcr.io/kite-org/kite`，发布流水线同时把同一份构建推到 Docker Hub 的 `zzde/kite`。写作时从当前网络匿名拉 ghcr 返回了 `denied`，我改用 Docker Hub 的 `zzde/kite:v0.16.0` 完成实测；你可以在自己环境里先试 ghcr，拉不动再换 Docker Hub，tag 对齐即可。不要用 `latest`，Kite 还在 0.x，升级镜像 tag 往往伴随数据库迁移。
+Kite 的官方镜像发布在 `ghcr.io/kite-org/kite`，发布流水线同时把同一份构建推到 Docker Hub 的 `zzde/kite`。写作时从当前网络匿名拉 ghcr 返回了 `denied`，改用 Docker Hub 的 `zzde/kite:v0.16.0` 完成实测；你可以在自己环境里先试 ghcr，拉不动再换 Docker Hub，tag 对齐即可。不要用 `latest`，Kite 还在 0.x，升级镜像 tag 往往伴随数据库迁移。
 
 工作目录里放一个 `compose.yaml`：
 
@@ -164,9 +166,9 @@ docker run --rm --network kind \
 
 集群名不是纯粹显示用的。Kite 的集群级接口路径是 `/api/v1/_clusters/<name>/…`，日志里能看到实际请求；名字频繁改，书签和脚本都会跟着失效。起一个稳定、简短的名字。
 
-接入类型会显示为 `External`，因为我们是从集群外部用 kubeconfig 连进去的。只有 Kite 自己跑在被管集群内部时，`In-Cluster` 才有意义，这不是本文的 Compose 场景。
+接入类型会显示为 `External`，因为是从集群外部用 kubeconfig 连进去的。只有 Kite 自己跑在被管集群内部时，`In-Cluster` 才有意义，这不是本文的 Compose 场景。
 
-权限边界要单独说清楚：Kite 对集群的访问能力，最终取决于这份 kubeconfig 对应的用户或 ServiceAccount；面板内的 RBAC 只能在这个上限内再收窄，不能凭空放大。测试时我用的是 kind 的管理员 kubeconfig，所以面板里什么都能改；如果只想看图不改资源，应该单独生成一份只读凭据再接入，而不是在面板里靠「小心操作」来兜底。
+权限上的限制要单独说清楚：Kite 对集群的访问能力，最终取决于这份 kubeconfig 对应的用户或 ServiceAccount；面板内的 RBAC 只能在这个上限内再收窄，不能凭空放大。测试时用的是 kind 的管理员 kubeconfig，所以面板里什么都能改；如果只想看图不改资源，应该单独生成一份只读凭据再接入，而不是在面板里靠「小心操作」来兜底。
 
 接入成功后，概览页会显示节点、Pod、Namespace、Service 的数量和最近事件：
 
@@ -190,7 +192,7 @@ Kite 的监控是「按集群配置一个 Prometheus 地址」，不是内置时
 
 地址必须从 Kite 容器内部可达。常见错误是填 `http://localhost:9090`：在宿主机上浏览器能打开，但 Kite 容器里的 `localhost` 是它自己。Prometheus 和 Kite 在同一个 Compose 项目里时，用服务名即可，例如 `http://prometheus:9090`；在另一台机器上就用那台机器的内网地址。
 
-本次环境里没有 Prometheus，我只验证了字段保存：保存后集群列表的 Prometheus 列变成 `Yes`，随后概览页立刻出现查询失败日志：
+本次环境里没有 Prometheus，只验证了字段保存：保存后集群列表的 Prometheus 列变成 `Yes`，随后概览页立刻出现查询失败日志：
 
 ```text
 Failed to get resource usage history: ... Post "http://prometheus:9090/api/v1/query_range":
@@ -272,17 +274,10 @@ docker exec kite-demo-postgres pg_dump -U kite -d kite > kite-backup.sql
 
 **日志和终端一直转圈，列表却正常。** 多半是反向代理没有转发 WebSocket 的 `Upgrade` / `Connection` 头。Kite 的实时日志、watch 和终端都走长连接，普通的 HTTP 反代配置不够。
 
-## 适用边界
+## 适用场景
 
 Kite 适合「集群不多、想要一个浏览器入口、愿意自己管一份 kubeconfig」的场景。单集群 homelab、几台机器的测试环境、需要给不熟悉 kubectl 的同事看资源，这些都很顺手。
 
 如果你需要的是声明式发布和漂移检测，应该继续用 GitOps 工具；如果你要管几十个集群、需要细粒度的多租户隔离和统一策略，Rancher 这类平台更合适；如果你只在本地偶尔看看，Lens 或 Headlamp 的桌面体验更轻。
 
 还要接受它的版本节奏：Kite 仍在 0.x，数据库迁移和配置项会变。镜像 tag 钉死，升级前备份，这两条比选哪个面板更重要。
-
-## 验证记录
-
-- 镜像：`zzde/kite:v0.16.0`（官方 ghcr 在当前网络匿名拉取返回 `denied`，改用发布流水线同步推送的 Docker Hub 镜像）；`postgres:17-alpine`
-- 集群：Docker Desktop 29.9.2 + kind v0.33.0，Kubernetes v1.37.0
-- 跑通：Compose 启动、`/healthz` 200、首次管理员创建、kubeconfig 接入 kind、概览/Deployments/Nodes、`cert-manager` 插件安装与侧栏加载、Prometheus 字段保存、Kite 重启后集群与插件记录保留、`pg_dump` 备份、宿主机重启后重启 Kite 重新接入集群
-- 未验证：Prometheus 曲线（环境无 Prometheus）、OIDC 完整登录、反向代理下的 WebSocket、metrics-server 的即时用量

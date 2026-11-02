@@ -3,7 +3,7 @@ title: "没有测试名额也能玩《明日方舟：终末地》二测"
 published: 2025-02-17T10:51:58+08:00
 description: "二测相比一测优化了不少，但测试名额太少。本文介绍用本地服务端体验《明日方舟：终末地》：配置 MongoDB、运行第三方服务端，再用 mitmproxy 把游戏请求转发到本地。"
 tags: [明日方舟, 终末地, mitmproxy, MongoDB]
-category: "教程"
+category: ""
 image: "./images/endfield-beta-local-server-1.png"
 draft: false
 comment: true

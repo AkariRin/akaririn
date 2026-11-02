@@ -3,7 +3,7 @@ title: "微软Edge浏览器卸载教程"
 published: 2025-03-17T14:30:46+08:00
 description: "Windows 没有提供卸载 Edge 的常规入口。本文借助开源工具 Remove-MS-Edge 一键卸载，并说明 webview 组件被哪些软件依赖，以及卸载后可能引发的系统更新失败循环。"
 tags: [Edge]
-category: "教程"
+category: ""
 image: ""
 draft: false
 comment: true

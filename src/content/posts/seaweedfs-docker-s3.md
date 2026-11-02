@@ -3,7 +3,7 @@ title: "用 Docker Compose 搭建 SeaweedFS：单机 S3 对象存储"
 published: 2026-08-27T00:55:58+08:00
 description: "SeaweedFS 是一个轻量的 S3 兼容对象存储。本文用 Docker Compose 在单机上搭一套五组件实例，讲清 master/volume/filer/s3 各自的作用，以及 IAM、建桶、生命周期这些和 AWS 直觉不太一样的地方。"
 tags: [SeaweedFS, S3, Docker, 对象存储]
-category: "教程"
+category: "自托管"
 image: ""
 draft: true
 comment: true
@@ -11,7 +11,9 @@ comment: true
 
 对象存储是自建服务里很容易被低估的一块。备份、网盘附件、知识库图片、CI 制品，最后都会需要一个能用 S3 协议读写的地方。MinIO 是最常见的选择，但它的强项是纠删码和成熟的控制台，单机跑一套并不算轻。SeaweedFS 走的是另一条路：Apache-2.0 许可，单个二进制，卷式追加写，S3 网关只是它众多入口中的一个。
 
-我选它，主要是看中资源占用和对海量小文件的友好程度。一台普通的小机器，跑 master、volume、filer、s3、admin 五个进程，内存占用仍然很低，也不需要为「对象存储」单独准备一块大盘。代价是它的 IAM 模型和 AWS 不完全一样，照搬 AWS 的命令很容易在第一步就卡住。这篇文章按我实际跑通的顺序，把五组件拆开、把身份和策略讲清楚。
+选它的主要理由是资源占用和对海量小文件的友好程度。一台普通的小机器，跑 master、volume、filer、s3、admin 五个进程，内存占用仍然很低，也不需要为「对象存储」单独准备一块大盘。代价是它的 IAM 模型和 AWS 不完全一样，照搬 AWS 的命令很容易在第一步就卡住。这篇文章按实际跑通的顺序，把五组件拆开、把身份和策略讲清楚。
+
+::github{repo="seaweedfs/seaweedfs"}
 
 ## 组件模型：五个进程各干什么
 
@@ -38,7 +40,7 @@ flowchart TB
 
 `master` 不存对象，只告诉客户端「这个 collection 应该去哪个 volume 写」。`volume` 按卷组织数据，一个卷有固定上限，写满后再向 master 申请新卷。`filer` 是文件系统层，S3 网关的桶、对象 key、IAM 用户、策略、生命周期规则都记在它这里。`s3` 本身几乎无状态，只读配置文件和 filer。`admin` 则通过 master 发现 filer、volume 和 s3。
 
-单机也可以用 `weed server -dir=/data` 一把梭，所有组件塞进一个进程。我不推荐把它当长期方案：排障时分不清是网关、filer 还是 volume 的问题，日志也混在一起。拆成五个容器后，每个组件的日志、健康检查、重启策略都能单独控制，代价只是多写几十行 compose。
+单机也可以用 `weed server -dir=/data` 一把梭，所有组件塞进一个进程。不推荐把它当长期方案：排障时分不清是网关、filer 还是 volume 的问题，日志也混在一起。拆成五个容器后，每个组件的日志、健康检查、重启策略都能单独控制，代价只是多写几十行 compose。
 
 ## Compose 编排
 
@@ -141,7 +143,7 @@ services:
 
 - `-ip` 是组件对外广播的地址，不是监听地址。容器里必须填服务名（`master`、`volume`、`filer`），否则 master 把 volume 注册成容器内网 IP，别的组件重启后解析不到。真正监听所有网卡靠 `-ip.bind=0.0.0.0`。
 - `-volumeSizeLimitMB=1024` 把单卷上限压到 1 GB，适合演示和小数据量。默认值更大，写满后才会申请新卷，小机器上没必要一上来就占很大。
-- `-max=32` 是 volume 进程允许的总卷数。这个值太小会直接卡死新桶的首次写入，后文「常见问题」会细说。我一开始写 `-max=8`，volume 启动时预建了 7 个空卷，建完第二个桶就没有可写卷了。
+- `-max=32` 是 volume 进程允许的总卷数。这个值太小会直接卡死新桶的首次写入，后文「常见问题」会细说。一开始写 `-max=8`，volume 启动时预建了 7 个空卷，建完第二个桶就没有可写卷了。
 - `-defaultReplication=000` 表示不做副本。单机没有第二块盘可放副本，写了 `001` 也只会让写入失败。
 - `WEED_JWT_FILER_SIGNING_KEY` 只注入 `s3` 和 `admin`。没有它，s3 启动日志会打 `Failed to load IAM configuration: no signing key found for STS service`，动态 IAM 直接不启用；静态身份仍然可用，所以很容易误判成「配置没错，只是权限不对」。`filer` 不要注入同一个变量：按上游的说明，那会打开 filer 写入侧的 JWT 校验，平白多一层失败面。示例里的密钥是随机串，生产环境请换掉。
 - admin 从 4.46 起对非 loopback 绑定要求鉴权。示例里直接写了用户名密码，生产环境请改成 `.env` 或 Docker secret，不要把密码提交进仓库。
@@ -158,7 +160,7 @@ sw-demo-s3-1       chrislusf/seaweedfs:4.51   "/entrypoint.sh s3 -…"   s3     
 sw-demo-volume-1   chrislusf/seaweedfs:4.51   "/entrypoint.sh volu…"   volume    54 minutes ago   Up About a minute (healthy)   0.0.0.0:19555->8080/tcp, [::]:19555->8080/tcp
 ```
 
-健康检查的路径不是随手写的。filer 的 `/status` 返回 404，根路径 `/` 才是 200；s3 的根路径会返回 403，admin 的根路径是 307 跳登录页。后两者我故意不加 `curl -f`，只验证端口有响应，否则容器会一直显示 unhealthy。
+健康检查的路径不是随手写的。filer 的 `/status` 返回 404，根路径 `/` 才是 200；s3 的根路径会返回 403，admin 的根路径是 307 跳登录页。后两者刻意不加 `curl -f`，只验证端口有响应，否则容器会一直显示 unhealthy。
 
 ## S3 网关配置与静态身份
 
@@ -191,7 +193,7 @@ s3 网关启动时会读 `-config` 指向的 JSON。最小配置长这样：
 docker exec sw-demo-s3-1 kill -HUP 1
 ```
 
-我实测过：往文件里加一个新身份，发送 `SIGHUP` 前用新 key 调用会返回 `InvalidAccessKeyId`，发送后立刻能列出桶。动态 IAM 不受这个动作影响，改的是静态通道才需要。
+实测结果：往文件里加一个新身份，发送 `SIGHUP` 前用新 key 调用会返回 `InvalidAccessKeyId`，发送后立刻能列出桶。动态 IAM 不受这个动作影响，改的是静态通道才需要。
 
 先用引导身份确认网关和 filer 都通了：
 
@@ -214,12 +216,12 @@ aws configure set default.s3.addressing_style path
 
 这一节是和 AWS 直觉差异最大的地方。先把结论摆出来：
 
-1. **user 和 access key 是两层**。user 是隔离边界，策略挂在 user 上；access key（或 ServiceAccount）只是连接凭据。删 user 不会连带删 ServiceAccount，吊销身份要分别处理。
+1. **user 和 access key 是两层**。user 是隔离单元，策略挂在 user 上；access key（或 ServiceAccount）只是连接凭据。删 user 不会连带删 ServiceAccount，吊销身份要分别处理。
 2. **新建 user 默认零权限**。不绑策略之前，它连自己名下的桶都读不到。
 3. **建桶不走 S3 API**。动态 IAM 的策略动作里没有 `s3:CreateBucket`，`aws s3 mb` 会被拒；桶要用 filer 侧的 `weed shell` 建。
 4. **策略是整份覆盖**。4.5x 没有 `s3.policy.create`，只能落文件再 `s3.policy -put`。
 
-我按这四条走一遍。下文的 shell 命令都通过 filer 容器执行：
+下面按这四条走一遍。下文的 shell 命令都通过 filer 容器执行：
 
 ```bash
 docker exec -i sw-demo-filer-1 weed shell -master=master:9333 -filer=filer:8888
@@ -268,7 +270,7 @@ docker cp pol-demo-app.json sw-demo-filer-1:/tmp/pol-demo-app.json
 printf 'lock\ns3.policy -put -name=pol-demo-app -file=/tmp/pol-demo-app.json\ns3.policy.attach -user demo-app -policy pol-demo-app\n' | docker exec -i sw-demo-filer-1 weed shell -master=master:9333 -filer=filer:8888
 ```
 
-这里有两个实测确认的细节。第一，`s3.policy.create` 不存在，执行会直接报 `unknown command: s3.policy.create`；第二，`s3.policy -put` 是整份覆盖，不是合并。我用一份只含 `s3:GetObject` 的策略覆盖同名策略，`s3.policy -get` 读回来就只剩这一条，原来的动作全没了。所以更新策略时要拿完整文件去覆盖，不能只写增量。
+这里有两个实测确认的细节。第一，`s3.policy.create` 不存在，执行会直接报 `unknown command: s3.policy.create`；第二，`s3.policy -put` 是整份覆盖，不是合并。用一份只含 `s3:GetObject` 的策略覆盖同名策略，`s3.policy -get` 读回来就只剩这一条，原来的动作全没了。所以更新策略时要拿完整文件去覆盖，不能只写增量。
 
 ![IAM Policies 页面，pol-demo-app 已创建并绑定到 demo-app](./images/seaweedfs-docker-s3-2.png)
 
@@ -310,7 +312,7 @@ delete: s3://app-data/hello.txt
 - `s3:Admin` 只覆盖 IAM 管理面（建 user、策略、ServiceAccount），**不包含** `GetObject`/`PutObject`。只给 `Admin` 的身份读不到对象，这是策略问题，不是配置问题。
 - 网关的 IAM 写接口默认只读。直接用 `aws iam create-user` 会返回 `AccessDenied: IAM write operations are disabled on this server`。所有写操作走 `weed shell`，不要在这条路上浪费时间。
 
-删身份时记得两层都处理。我拿一个临时 user 验证过：`s3.user.delete` 之后，它名下的 ServiceAccount 仍然出现在 `s3.serviceaccount.list` 里，只是父 user 不存在了；要用 `s3.serviceaccount.delete -id=sa:<user>:<随机串>` 单独清掉。反过来，删 ServiceAccount 也不会影响 user。
+删身份时记得两层都处理。用一个临时 user 验证过：`s3.user.delete` 之后，它名下的 ServiceAccount 仍然出现在 `s3.serviceaccount.list` 里，只是父 user 不存在了；要用 `s3.serviceaccount.delete -id=sa:<user>:<随机串>` 单独清掉。反过来，删 ServiceAccount 也不会影响 user。
 
 ## 生命周期与版本控制
 
@@ -333,7 +335,7 @@ aws --endpoint-url http://127.0.0.1:19333 s3api put-bucket-lifecycle-configurati
 aws --endpoint-url http://127.0.0.1:19333 s3api get-bucket-lifecycle-configuration --bucket app-data
 ```
 
-回读能拿到同一条规则，说明规则已经落在桶上。`AbortIncompleteMultipartUpload` 是我唯一建议默认开启的规则：未完成的分片上传不会出现在 `s3 ls` 里，但分片数据已经写进卷，长期堆着会白占空间。7 天是个保守值，给断点续传和慢速上传留足余量。
+回读能拿到同一条规则，说明规则已经落在桶上。`AbortIncompleteMultipartUpload` 是唯一建议默认开启的规则：未完成的分片上传不会出现在 `s3 ls` 里，但分片数据已经写进卷，长期堆着会白占空间。7 天是个保守值，给断点续传和慢速上传留足余量。
 
 不想等生命周期扫描，也可以手动清：
 
@@ -341,9 +343,9 @@ aws --endpoint-url http://127.0.0.1:19333 s3api get-bucket-lifecycle-configurati
 printf 'lock\ns3.clean.uploads -timeAgo=24h\n' | docker exec -i sw-demo-filer-1 weed shell -master=master:9333 -filer=filer:8888
 ```
 
-它会列出并 purge 超过指定时间的未完成上传目录。我用 `-timeAgo=0m` 强制清过一个刚创建的分片上传，`list-multipart-uploads` 随后返回空，说明这条路径是通的。生产上把 `-timeAgo=24h` 放进每日 cron 即可，不要用 0。
+它会列出并 purge 超过指定时间的未完成上传目录。用 `-timeAgo=0m` 强制清过一个刚创建的分片上传，`list-multipart-uploads` 随后返回空，说明这条路径是通的。生产上把 `-timeAgo=24h` 放进每日 cron 即可，不要用 0。
 
-需要说明的是，生命周期的**实际删除**是服务端按天执行的任务，不是分钟级。我验证了规则的写入、回读和手动清理，没有等一天去观察过期对象被自动删掉；如果你要验证，建议用一个短前缀、可丢弃的对象，并预留至少一个扫描周期。
+需要说明的是，生命周期的**实际删除**是服务端按天执行的任务，不是分钟级。验证过规则的写入、回读和手动清理，没有等一天去观察过期对象被自动删掉；如果你要验证，建议用一个短前缀、可丢弃的对象，并预留至少一个扫描周期。
 
 版本控制这边，4.51 的基础行为是正常的：
 
@@ -353,7 +355,7 @@ printf 'lock\ns3.bucket.versioning -enable -name app-data\n' | docker exec -i sw
 
 连续写入同一个 key 两次，`list-object-versions` 能看到两个版本；不指定 version-id 删除会生成 DeleteMarker；`-suspend` 只能暂停，不能回到「从未开启」的状态，这一点和 AWS 一致。
 
-但我不建议给通用桶开版本。我在 4.51 上用 20 MB 对象做了一次分片上传，`.uploads` 为空、下载 md5 一致、卷目录从 6 MB 长到 27 MB，没有看到残留或卷占用放大；但这只是一个简单场景，不能证明重写型负载下也正常。SeaweedFS 的版本回收路径仍然不如 AWS 成熟。要用的话，只对确实需要保留历史的桶开启，同时配一条过期删除规则，并定期看 `s3.bucket.list` 的 `size` 字段。普通备份和附件场景，我更愿意把版本控制关掉，用外部备份解决误删。
+但不建议给通用桶开版本。在 4.51 上用 20 MB 对象做了一次分片上传，`.uploads` 为空、下载 md5 一致、卷目录从 6 MB 长到 27 MB，没有看到残留或卷占用放大；但这只是一个简单场景，不能证明重写型负载下也正常。SeaweedFS 的版本回收路径仍然不如 AWS 成熟。要用的话，只对确实需要保留历史的桶开启，同时配一条过期删除规则，并定期看 `s3.bucket.list` 的 `size` 字段。普通备份和附件场景，更愿意把版本控制关掉，用外部备份解决误删。
 
 ## 数据落在哪、怎么备份
 
@@ -391,10 +393,3 @@ printf 'lock\ns3.bucket.versioning -enable -name app-data\n' | docker exec -i sw
 SeaweedFS 适合这样的场景：一台或几台机器，数据量在几十 GB 到几 TB，写入以中小对象为主，想要一个 Apache-2.0、资源占用低、能说 S3 的对象存储。它的 filer 还额外提供文件系统语义，后面接网盘或知识库都比较顺。
 
 不适合的场景也很明确：需要开箱即用的多副本、跨机架容灾、成熟的生命周期和版本管理，或者团队里没人愿意维护存储。单机 `000` 没有冗余，所有「高可用」都要自己往上叠。SeaweedFS 的 shell 命令在不同小版本之间有变化，部署时把镜像 tag 固定住，升级前先在一套测试实例上把 `s3.*` 命令枚举一遍，比事后排查便宜得多。
-
-## 验证记录
-
-- 镜像：`chrislusf/seaweedfs:4.51`（`weed version` 输出 `30GB 4.51 ffa87c25f linux amd64`）
-- Compose：`compose.yaml`，项目名 `sw-demo`
-- 已跑通：五组件 healthy；静态身份 list/create bucket；新建 user 零权限（AccessDenied）；策略 put/attach；put/get/list/delete；桶隔离；ServiceAccount 读写；删 user 后 SA 残留并可单独删除；`s3.policy -put` 整份覆盖；`s3.policy.create` 不存在；生命周期规则写入与回读；`s3.clean.uploads` 清理未完成分片；版本控制开启、多版本、DeleteMarker、suspend；重启后对象和策略持久化；`SIGHUP` 热加载静态身份
-- 未完全验证/降级：生命周期过期删除按天执行，未等待自动删除；版本控制在 20 MB 单对象分片上传测试中未发现残留或卷占用放大，文章按「基础可用但不建议通用开启」处理

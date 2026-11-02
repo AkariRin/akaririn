@@ -3,7 +3,7 @@ title: "五分钟搭建容器化Blessing Skin皮肤站"
 published: 2024-08-06T23:15:44+08:00
 description: "Blessing Skin 是开源的 Minecraft 皮肤站，官方没有提供可用于生产环境的镜像。本文从下载 release、配置环境变量开始，自行编写 Dockerfile 与 Compose 文件，用 Redis 接管缓存、会话与队列，完成容器化部署。"
 tags: [Minecraft, Docker, PHP]
-category: "教程"
+category: "自托管"
 image: ""
 draft: false
 comment: true

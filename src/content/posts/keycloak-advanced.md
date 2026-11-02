@@ -3,7 +3,7 @@ title: "Keycloak 进阶：Passkey、邮件与长期运维"
 published: 2026-08-29T23:52:27+08:00
 description: "Keycloak 跑起来只是开始。这篇文章整理几件迟早要做的事：用 Passkey 替代密码、配好 realm 邮件、定制登录页、调整会话与 token 生命周期，以及升级和安全加固时该注意什么。"
 tags: [Keycloak, Passkey, WebAuthn, Docker]
-category: "教程"
+category: "自托管"
 image: ""
 series: "Keycloak 实战"
 seriesOrder: 3
@@ -24,7 +24,7 @@ Passkey 在 Keycloak 里有两套策略，容易混淆：
 
 本文讲后者。它对应 Authentication → Policies → WebAuthn Passwordless Policy，也可以直接在 realm 的 JSON 里改。26.8 中 Passkeys 已是默认特性（`serverinfo` 里类型为 `DEFAULT`），不需要额外开 feature flag。
 
-关键字段和我的实测值：
+关键字段与实测值：
 
 | 字段 | 值 | 说明 |
 |---|---|---|
@@ -48,7 +48,7 @@ docker exec kc-demo-keycloak /opt/keycloak/bin/kcadm.sh \
   -r homelab -s enabled=true -s defaultAction=false
 ```
 
-我实测的登记路径是：用户登录 Account Console → Account security → Signing in → Passwordless → Set up Passkey → 浏览器弹出认证器 → Register。登记成功后，同一页会出现凭据条目：
+实测的登记路径是：用户登录 Account Console → Account security → Signing in → Passwordless → Set up Passkey → 浏览器弹出认证器 → Register。登记成功后，同一页会出现凭据条目：
 
 ![](./images/keycloak-advanced-1.png)
 
@@ -78,7 +78,7 @@ Keycloak 26 起，SMTP 是 **per-realm** 配置，位置在 Realm settings → E
 | StartTLS | Off / On | 与端口匹配 |
 | SSL | Off / On | 465 端口才开 |
 
-我本地用 Mailpit 做闭环测试：compose 里加一个 `axllent/mailpit` 容器，realm 的 Host 填 `mailpit`、Port 填 `1025`、From 填 `keycloak@example.com`，认证和 TLS 都关闭。配置页如下：
+本地测试用 Mailpit 做闭环：compose 里加一个 `axllent/mailpit` 容器，realm 的 Host 填 `mailpit`、Port 填 `1025`、From 填 `keycloak@example.com`，认证和 TLS 都关闭。配置页如下：
 
 ![](./images/keycloak-advanced-2.png)
 
@@ -131,7 +131,7 @@ volumes:
 
 ## 会话、Token 与并发
 
-Keycloak 26.8 的 realm 默认值如下，我逐项读过：
+Keycloak 26.8 的 realm 默认值如下，已逐项核对：
 
 | 配置 | 默认值 | 含义 |
 |---|---|---|
@@ -142,7 +142,7 @@ Keycloak 26.8 的 realm 默认值如下，我逐项读过：
 | Refresh Token Max Reuse | 0 | 刷新令牌可复用次数；0 表示不限制，仅在轮换开启时有意义 |
 | Revoke Refresh Token | false | 是否启用 refresh token 轮换 |
 
-小团队或家庭场景，我建议把 **SSO Session Idle 调到 8 小时、Max 调到 7 天**，access token 保持 5–15 分钟。理由很实际：一天里反复登录很烦，但 access token 是 bearer token，泄露即生效，寿命越短越好。refresh token 负责在后台续期，用户感知不到。
+小团队或家庭场景，建议把 **SSO Session Idle 调到 8 小时、Max 调到 7 天**，access token 保持 5–15 分钟。理由很实际：一天里反复登录很烦，但 access token 是 bearer token，泄露即生效，寿命越短越好。refresh token 负责在后台续期，用户感知不到。
 
 **打开 refresh token 轮换**（Revoke Refresh Token = true）能降低 refresh token 被复用的风险，代价是每次刷新都会生成新 token，个别老服务可能不适应。先在一个 client 上验证，再全局打开。
 
