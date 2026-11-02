@@ -12,7 +12,7 @@ export const profileConfig: ProfileConfig = {
 	name: "梦清",
 
 	// 个人签名
-	bio: "欲买桂花同载酒，终不似，少年游",
+	bio: "穷则独善其身，达则兼济天下",
 
 	// 链接配置
 	// 已经预装的图标集：fa7-brands，fa7-regular，fa7-solid，material-symbols，simple-icons

@@ -45,13 +45,13 @@ export const siteConfig: SiteConfig = {
 	title: "梦清の小窝",
 
 	// 站点副标题
-	subtitle: "欲买桂花同载酒，终不似，少年游",
+	subtitle: "穷则独善其身，达则兼济天下",
 
 	// 站点 URL
 	site_url: "https://rbq.dev",
 
 	// 站点描述
-	description: "欲买桂花同载酒，终不似，少年游。",
+	description: "穷则独善其身，达则兼济天下。",
 
 	// 站点关键词
 	keywords: ["梦清", "博客", "技术博客", "Linux", "Docker", "Minecraft"],
