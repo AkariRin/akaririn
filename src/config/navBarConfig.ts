@@ -33,23 +33,6 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 
 			// 系列
 			LinkPresets.Series,
-
-			// 常用分类（对应 WordPress 顶部导航的「分类」下拉）
-			{
-				name: "碎碎念",
-				url: "/archive/?category=%E7%A2%8E%E7%A2%8E%E5%BF%B5",
-				icon: "material-symbols:chat-bubble-outline",
-			},
-			{
-				name: "教程",
-				url: "/archive/?category=%E6%95%99%E7%A8%8B",
-				icon: "material-symbols:menu-book",
-			},
-			{
-				name: "项目",
-				url: "/archive/?category=%E9%A1%B9%E7%9B%AE",
-				icon: "material-symbols:rocket-launch",
-			},
 		],
 	});
 
@@ -110,28 +93,6 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 
 			// 关于页面
 			LinkPresets.About,
-		],
-	});
-
-	// 自定义导航栏链接
-	links.push({
-		name: "链接",
-		url: "#",
-		icon: "material-symbols:link",
-		// 子菜单
-		children: [
-			{
-				name: "主站",
-				url: "https://akari.moe",
-				external: true,
-				icon: "material-symbols:home",
-			},
-			{
-				name: "GitHub Organization",
-				url: "https://github.com/AkariNetwork",
-				external: true,
-				icon: "fa7-brands:github",
-			},
 		],
 	});
 
