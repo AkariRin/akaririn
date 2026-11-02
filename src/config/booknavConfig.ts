@@ -25,43 +25,30 @@ export const booknavPageConfig: BooknavPageConfig = {
 // 每个数组项是一个分类组，分类组内的 items 是该分类下的书签
 export const booknavConfig: BooknavGroup[] = [
 	{
-		id: "dev",
-		name: "开发",
+		id: "akari-network",
+		name: "Akari Network",
 		icon: "material-symbols:code-rounded",
-		desc: "写代码时离不开的站点",
+		desc: "Akari Network 公开服务",
 		weight: 100,
 		items: [],
 	},
 	{
-		id: "opensource",
-		name: "项目",
-		icon: "material-symbols:code-rounded",
+		id: "github-orgs",
+		name: "GitHub 组织",
+		icon: "fa7-brands:github",
 		desc: "好用的开源项目",
 		weight: 90,
-		items: [],
-	},
-	{
-		id: "design",
-		name: "设计",
-		icon: "material-symbols:palette-outline-rounded",
-		desc: "配色、图标与灵感来源",
-		weight: 90,
-		items: [],
-	},
-	{
-		id: "tools",
-		name: "工具",
-		icon: "material-symbols:build-outline-rounded",
-		desc: "顺手的在线小工具",
-		weight: 80,
-		items: [],
-	},
-	{
-		id: "resources",
-		name: "资源",
-		icon: "material-symbols:auto-stories-outline-rounded",
-		desc: "文档、教程与阅读",
-		weight: 70,
-		items: [],
+		items: [
+			{
+				title: "Akari Network",
+				url: "https://github.com/AkariNetwork",
+				icon: "fa7-brands:github",
+			},
+			{
+				title: "Aemeath Projects",
+				url: "https://github.com/aemeath-projects",
+				icon: "fa7-brands:github",
+			},
+		],
 	},
 ];
