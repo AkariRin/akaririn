@@ -36,7 +36,7 @@ export const booknavConfig: BooknavGroup[] = [
 		id: "github-orgs",
 		name: "GitHub 组织",
 		icon: "fa7-brands:github",
-		desc: "好用的开源项目",
+		desc: "",
 		weight: 90,
 		items: [
 			{
