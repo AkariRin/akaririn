@@ -3,7 +3,7 @@ title: "一条命令为Linux系统创建虚拟内存"
 published: 2024-08-04T23:01:33+08:00
 description: "本文给出一条可直接复制的虚拟内存（swap）创建命令，并整理虚拟内存大小的设置建议，以及 fallocate 与 dd 在创建文件上的区别。"
 tags: [Linux]
-category: "未分类"
+category: "运维"
 image: ""
 draft: false
 comment: true

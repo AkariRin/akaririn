@@ -182,7 +182,7 @@ docker run --rm --network kind \
 
 ![Kite 的节点列表](./images/kite-docker-deploy-4.png)
 
-到这一步，「接入集群 → 看到节点和 Pod → 打开工作负载」这条主链路就闭环了。
+到这一步，「接入集群 → 看到节点和 Pod → 打开工作负载」这条主链路就走通了。
 
 ## 接入监控
 

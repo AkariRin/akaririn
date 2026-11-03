@@ -40,7 +40,7 @@ flowchart TB
 
 `master` 不存对象，只告诉客户端「这个 collection 应该去哪个 volume 写」。`volume` 按卷组织数据，一个卷有固定上限，写满后再向 master 申请新卷。`filer` 是文件系统层，S3 网关的桶、对象 key、IAM 用户、策略、生命周期规则都记在它这里。`s3` 本身几乎无状态，只读配置文件和 filer。`admin` 则通过 master 发现 filer、volume 和 s3。
 
-单机也可以用 `weed server -dir=/data` 一把梭，所有组件塞进一个进程。不推荐把它当长期方案：排障时分不清是网关、filer 还是 volume 的问题，日志也混在一起。拆成五个容器后，每个组件的日志、健康检查、重启策略都能单独控制，代价只是多写几十行 compose。
+单机也可以直接用 `weed server -dir=/data` 把所有组件塞进一个进程。不推荐把它当长期方案：排障时分不清是网关、filer 还是 volume 的问题，日志也混在一起。拆成五个容器后，每个组件的日志、健康检查、重启策略都能单独控制，代价只是多写几十行 compose。
 
 ## Compose 编排
 
