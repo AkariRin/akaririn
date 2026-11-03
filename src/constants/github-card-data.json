@@ -1,4 +1,16 @@
 {
+	"cloudflare/cloudflared": {
+		"description": "Cloudflare Tunnel client",
+		"language": "Go",
+		"avatarUrl": "https://avatars.githubusercontent.com/u/314135?v=4",
+		"license": "Apache-2.0"
+	},
+	"dani-garcia/vaultwarden": {
+		"description": "Unofficial Bitwarden compatible server written in Rust, formerly known as bitwarden_rs",
+		"language": "Rust",
+		"avatarUrl": "https://avatars.githubusercontent.com/u/725423?v=4",
+		"license": "AGPL-3.0"
+	},
 	"docker/docker-install": {
 		"description": "Docker installation script",
 		"language": "Shell",

@@ -35,5 +35,9 @@
   "src:content/posts/images/keycloak-advanced-4.png": "d2d5d9e6e8eaffffff",
   "src:content/posts/images/keycloak-advanced-3.png": "8f9192e4e4e4ffffff",
   "src:content/posts/images/keycloak-advanced-2.png": "909192e3e3e3ffffff",
-  "src:content/posts/images/keycloak-advanced-1.png": "909192e6e6e6ffffff"
+  "src:content/posts/images/keycloak-advanced-1.png": "909192e6e6e6ffffff",
+  "src:content/posts/images/vaultwarden-docker-compose-4.png": "a3a5a8ffffffffffff",
+  "src:content/posts/images/vaultwarden-docker-compose-3.png": "d5d4d5d0d3d7e4e7e9",
+  "src:content/posts/images/vaultwarden-docker-compose-2.png": "a8abaea5aaaedfdfe1",
+  "src:content/posts/images/vaultwarden-docker-compose-1.png": "f3f5f8f5f7f9f0f3f7"
 }
