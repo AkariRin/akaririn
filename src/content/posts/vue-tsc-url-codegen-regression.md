@@ -41,7 +41,7 @@ src/components/UserInfoCard.vue(88,31): error TS2304: Cannot find name 'props'.
 
 也就是说，3.3.12 把 1 个真实错误放大成了 96 个。其中 48 个 `Cannot find name`、46 个 `possibly null`，以及那个 `implicitly has an 'any' type`（模板作用域丢失后，回调参数失去了推断来源），都是同一处 codegen 故障的级联产物。只有 1 个 TS2322 是真正需要改代码的问题。
 
-当错误呈现出"整片作用域变量同时消失"的形态时，不要继续逐条核对类型，先怀疑解析。
+当错误呈现出"整片作用域变量同时消失"的形态时，问题更可能在解析而不是类型检查。
 
 ## 二、最小复现：组件属性里的 `//`
 
@@ -90,7 +90,7 @@ src/App.vue(13,13): error TS2552: Cannot find name 'item'. Did you mean 'items'?
 src/App.vue(13,37): error TS2551: Property 'value' does not exist on type 'true'. Did you mean 'valueOf'?
 ```
 
-几个边界值得记下来：
+几个边界条件：
 
 - 静态属性 `label="https://example.com"` 和绑定 `` :label="`https://example.com/${item.id}`" `` 都会触发。
 - 触发点不必和报错变量在同一个元素上。同一文件里只要有一个组件属性含 `//`，整个模板作用域的绑定都可能失效。
@@ -211,7 +211,7 @@ $ grep -n "example.com" virtual-script_ts.txt
 几个容易踩的坑：
 
 - 3.3.14 里 `script_ts` 不再直接挂在顶层 `embeddedCodes` 上，而是嵌在 `root_tags` 下面，需要递归。
-- `resolveEmbeddedCode` 内部会 `catch` 异常并打到 stderr。看到 dump 出来是空内容，先查 stderr，不要以为文件本来就没有内容。
+- `resolveEmbeddedCode` 内部会 `catch` 异常并打到 stderr。看到 dump 出来是空内容，先查 stderr；空内容不等于文件本来就没有内容。
 - 如果只想快速判断是不是这个问题，不必写 dump 脚本：把报错文件里组件属性中的 `//` 全部改成 script 常量，错误成片消失，基本就可以确认。
 
 ## 五、修复与规避
@@ -242,7 +242,7 @@ const githubUrl = "https://github.com/AkariRin/bookshelf"
 </template>
 ```
 
-这个办法在 3.3.12 / 3.3.13 下确实有效，因为生成的 props 代码里不再有 `//`。代价是要长期遵守一条纪律：模板里的组件属性永远不能直接写 URL。一旦复发，报错仍然是与 URL 无关的 `Cannot find name`，排查成本很高。
+这个办法在 3.3.12 / 3.3.13 下确实有效，因为生成的 props 代码里不再有 `//`。代价是模板里的组件属性不能直接写 URL：一旦复发，报错仍然是与 URL 无关的 `Cannot find name`，排查成本很高。
 
 ### 方案 C：用 pnpm patch 改正则
 
@@ -295,15 +295,15 @@ const githubUrl = "https://github.com/AkariRin/bookshelf"
 - **症状发生了变化**。3.3.14 把模板虚拟代码与 setup 控制流隔离后，损坏的推断副本还会让 `.value` 收窄失效，于是除了 `Cannot find name`，还会出现 `Property 'value' does not exist`（见 #6322）。旧的报错文本不能作为唯一判据。
 - **4.0.0-alpha.3 不包含这段正则**。4.0 的 codegen 已重构，相关代码在 `lib/template/elements.js`，但它的 peer dependency 要求 TypeScript ≥ 7.1.0-beta，目前不适合放进生产项目。
 
-结论仍然是：**继续精确 pin `vue-tsc@3.3.11`**。升级前至少确认一件事：`node_modules/@vue/language-core/lib/codegen/template/element.js` 里那段 `.replace(/\/\/(.*)$/gm, ...)` 已经消失，或者 #6241 已合并并随新版本发布。不要只看版本号。
+结论仍然是：**继续精确 pin `vue-tsc@3.3.11`**。升级前至少确认一件事：`node_modules/@vue/language-core/lib/codegen/template/element.js` 里那段 `.replace(/\/\/(.*)$/gm, ...)` 已经消失，或者 #6241 已合并并随新版本发布。版本号本身不足以判断。
 
 ## 七、复盘
 
-1. **解析错误会伪装成类型错误。** 当同一文件的模板作用域成片消失时，先怀疑 codegen 或 parse，而不是类型系统变严。
+1. **解析错误会伪装成类型错误。** 同一文件的模板作用域成片消失时，问题更可能在 codegen 或 parse，而不是类型系统变严。
 2. **"全是误报"是一个需要被证伪的结论。** 最小复现是分界线。没有最小复现之前，"误报"只是猜测。
 3. **编译器类工具适合精确 pin。** caret 范围会把已知 bug 悄悄带回来，而且是在一次看起来无关的 `pnpm update` 里。
-4. **跟踪上游要跟 duplicate target。** 我们最初开的 #6264 被关闭，真正有效的是更早的 #6240。重复开 issue 只会分散信息。
-5. **症状会随上游重构漂移。** 3.3.12 的 `Cannot find name` 和 3.3.14 的 `Property 'value' does not exist` 是同一个根因。判断依据应该是最小复现，不是错误文本。
+4. **跟踪上游时，duplicate target 比新开的 issue 更有效。** 我们最初开的 #6264 被关闭，真正有效的是更早的 #6240。重复开 issue 只会分散信息。
+5. **症状会随上游重构漂移。** 3.3.12 的 `Cannot find name` 和 3.3.14 的 `Property 'value' does not exist` 是同一个根因。判断依据是最小复现，而不是错误文本。
 6. **给上游报 bug 时，版本矩阵、最小复现、生成的虚拟代码**比大段文字描述有用得多。
 
-如果你也在升级 `vue-tsc` 后看到成片的 `Cannot find name` 或 `possibly null`，先搜一下模板里的 `https://`。大概率不是你的代码变差了，而是 props 里的 `//` 被当成了注释。
+升级 `vue-tsc` 后出现成片的 `Cannot find name` 或 `possibly null` 时，先搜模板里的 `https://`；问题多半出在 props 里的 `//` 被当成了注释，而不是代码变差。

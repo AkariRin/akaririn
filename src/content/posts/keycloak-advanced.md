@@ -38,7 +38,7 @@ Passkey 在 Keycloak 里有两套策略，容易混淆：
 
 本地测试时 RP ID 是 `localhost`，因为浏览器访问的就是 `http://localhost:18080`。这个值不是随手填的：浏览器只在**当前 origin 与 RP ID 匹配**时才出示凭据。RP ID 必须是 origin 的可注册域后缀；`localhost` 是特例，允许 HTTP。生产环境用 `https://auth.example.com`，RP ID 就填 `auth.example.com`，不要带协议、端口或路径。
 
-**换域名等于所有 Passkey 作废。** 凭据仍然留在用户的认证器里，但浏览器不会再为新的 origin 提供它，服务端也不会有任何日志。用户看到的现象只是「我的 passkey 不见了」。所以 RP ID、realm 名、`KC_HOSTNAME`、证书 SAN 应该在第一次上线前一次定死，不要留过渡域名。
+**换域名等于所有 Passkey 作废。** 凭据仍然留在用户的认证器里，但浏览器不会再为新的 origin 提供它，服务端也不会有任何日志。用户看到的现象只是「我的 passkey 不见了」。所以 RP ID、realm 名、`KC_HOSTNAME`、证书 SAN 的取值在第一次上线前就要定下来；过渡域名会让切换时的 Passkey 全部失效。
 
 开放自助登记需要打开 required action，但**不要设为默认强制**：
 
@@ -54,7 +54,7 @@ docker exec kc-demo-keycloak /opt/keycloak/bin/kcadm.sh \
 
 Keycloak 26 的登录页还有一个「Sign in with Passkey」入口，点击后不需要先输入用户名。未登记的设备仍然回落到用户名加密码，这条回退路径不能被切断——Passkey 是加法，不是替换。
 
-还有一条恢复路径要提前准备：注册了 Passkey 的用户如果换了设备、又忘了密码，就会同时失去两种登录方式。建议至少保留一种可自助恢复的凭据（例如设置密码或 TOTP），或者由管理员在 Users → Credentials 里重置。不要为了「纯无密码」把密码和恢复选项全部关掉，否则一次换机就会变成人工工单。
+还有一条恢复路径要提前准备：注册了 Passkey 的用户如果换了设备、又忘了密码，就会同时失去两种登录方式。至少保留一种可自助恢复的凭据（例如设置密码或 TOTP），或者由管理员在 Users → Credentials 里重置。为了「纯无密码」把密码和恢复选项全部关掉，一次换机就会变成人工工单。
 
 策略页在 Authentication → Policies，可以同时看到 Password、OTP、WebAuthn、WebAuthn Passwordless 和 CIBA 五组：
 
@@ -102,9 +102,9 @@ Keycloak 26 起，SMTP 是 **per-realm** 配置，位置在 Realm settings → E
 
 品牌化有两条路径，按投入选。
 
-**第一条：只换主题名。** Realm settings → Themes → Login theme，留空表示跟随版本默认。26.8 的内置登录主题是 `keycloak.v2`（对应 `LOGIN_V2` 特性），账户控制台是 `keycloak.v3`；具体可选值以当前镜像为准，不要照抄旧版本教程里的 `keycloak`。这条路径零维护，升级不会坏。
+**第一条：只换主题名。** Realm settings → Themes → Login theme，留空表示跟随版本默认。26.8 的内置登录主题是 `keycloak.v2`（对应 `LOGIN_V2` 特性），账户控制台是 `keycloak.v3`；具体可选值以当前镜像为准；旧版本教程里的 `keycloak` 未必存在。这条路径零维护，升级不会坏。
 
-**第二条：最小覆盖。** 不要复制整个内置主题，只覆盖需要改的文件。目录结构大致是：
+**第二条：最小覆盖。** 做法是只覆盖需要改的文件，不复制整个内置主题。目录结构大致是：
 
 ```
 themes/homelab/login/theme.properties
@@ -127,7 +127,7 @@ volumes:
 
 再在 Realm settings → Themes 里把 Login theme 设为 `homelab`。改完要重启容器，或者至少让主题缓存失效；Keycloak 会缓存主题资源，改完不重启经常看不到变化。
 
-不要改 `login.ftl` 里的结构，除非你准备在每次大版本升级时重新对齐模板。绝大多数需求（logo、主色、页脚文字、背景图）都能靠 CSS 变量和 `theme.properties` 完成。把改动限制在 CSS，升级成本最低。
+改 `login.ftl` 里的结构，意味着每次大版本升级都要重新对齐模板。绝大多数需求（logo、主色、页脚文字、背景图）都能靠 CSS 变量和 `theme.properties` 完成。改动限制在 CSS，升级成本最低。
 
 ## 会话、Token 与并发
 
@@ -146,7 +146,7 @@ Keycloak 26.8 的 realm 默认值如下，已逐项核对：
 
 **打开 refresh token 轮换**（Revoke Refresh Token = true）能降低 refresh token 被复用的风险，代价是每次刷新都会生成新 token，个别老服务可能不适应。先在一个 client 上验证，再全局打开。
 
-client 级可以覆盖 realm 级。Clients → `<client>` → Advanced settings 里有 Access Token Lifespan、Client Session Idle、Client Session Max、Client Offline Session Idle/Max。只给某个长任务服务放宽，不要为了一个服务改整个 realm。
+client 级可以覆盖 realm 级。Clients → `<client>` → Advanced settings 里有 Access Token Lifespan、Client Session Idle、Client Session Max、Client Offline Session Idle/Max。只给某个长任务服务放宽；为一个服务改整个 realm，会连带影响其他 client。
 
 **offline session 要克制。** 它用于「用户不在场也要长期访问」的场景，比如定时任务。普通 Web 应用开了只会积累无用会话，最后表现为内存和数据库连接缓慢上涨。遇到「内存持续走高」，先看会话数量，再考虑加内存。
 
@@ -181,11 +181,11 @@ FROM quay.io/keycloak/keycloak:<newer-tag> AS builder
 1. **关闭所有 client 的 Direct Access Grants。** 它允许用用户名密码直接换 token，绕过登录页和 MFA。迁移脚本除外，生产环境不应保留。
 2. **强制 HTTPS。** 反代层做 301 + HSTS，realm 的 Require SSL 设为 `all requests`。本文测试环境用 `external requests`，是因为本地是 HTTP。
 3. **打开暴力破解检测。** Realm settings → Security defenses → Brute force detection。建议阈值 10 次、初始等待 60 秒、最长 900 秒。默认是关闭的。
-4. **管理员账号独立。** 不要用日常账号兼任管理员；单独邮箱、强口令，最好只从内网或 VPN 访问 `/admin/`。
+4. **管理员账号独立。** 日常账号兼任管理员会把日常登录暴露成管理入口；管理员账号用单独邮箱、强口令，最好只从内网或 VPN 访问 `/admin/`。
 5. **关闭自助注册。** Realm settings → Login → User registration，除非你确实要开放注册。开放时至少打开 Email verification。
 6. **定期导出 realm。** 导出配置（不含用户）作为数据库备份之外的第二层，便于比对「谁改了哪个 client」。
 7. **限制会话。** 按上一节的建议设置 Idle/Max，不要让会话无限续期。
-8. **跟进镜像更新。** 订阅 Keycloak 的安全公告，至少每个小版本评估一次；不要长期停在某个旧 tag 上。
+8. **跟进镜像更新。** 订阅 Keycloak 的安全公告，至少每个小版本评估一次；长期停在旧 tag 上会错过安全修复。
 
 ## 备份与恢复演练
 

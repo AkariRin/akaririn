@@ -42,7 +42,7 @@ MinIO 在 2025 年调整了镜像分发，`minio/minio` 在 Docker Hub 上已经
 
 ## Compose 编排
 
-完整文件如下，项目名固定为 `ol-demo`。代码里的 `SECRET_KEY`、`UTILS_SECRET` 和所有 `change-me-please` 都是本地示例值，照抄前请重新生成并替换。
+完整文件如下，项目名固定为 `ol-demo`。代码里的 `SECRET_KEY`、`UTILS_SECRET` 和所有 `change-me-please` 都是本地示例值，照抄前需要重新生成并替换。
 
 ```yaml
 name: ol-demo
@@ -291,7 +291,7 @@ Added `local` successfully.
 
 排查时按现象分流：服务端无报错、桶为空，先查 `AWS_S3_UPLOAD_BUCKET_URL`；上传返回 403，查 CORS 和 ACL；返回 404，查 path-style 和桶名；页面是 HTTPS 但桶地址是 HTTP，先解决协议一致性。
 
-建议每篇文章都用文档编辑器实测一次图片上传和刷新后读取，不要只测头像。头像和文档附件走的是同一套 S3 逻辑，但文档附件的路径、权限和展示链路更完整。
+头像和文档附件走的是同一套 S3 逻辑，但文档附件的路径、权限和展示链路更完整；测试时用文档编辑器的图片上传和刷新后读取，覆盖面比只测头像更全。
 
 ## 邮件通知
 
@@ -316,7 +316,7 @@ curl -s http://localhost:18035/api/v1/messages
 
 返回 JSON 里的 `total` 大于 0，说明 Outline 到 SMTP 的链路是通的。Mailpit 的 Web 界面在 `http://localhost:18035`，不需要登录。
 
-生产环境把 `SMTP_HOST`、`SMTP_PORT`、`SMTP_USERNAME`、`SMTP_PASSWORD`、`SMTP_FROM_EMAIL` 换成服务商提供的值，删掉 mailpit 服务。不要把真实密码写进 compose 文件，至少用 `.env` 或容器编排平台注入的 secret。
+生产环境把 `SMTP_HOST`、`SMTP_PORT`、`SMTP_USERNAME`、`SMTP_PASSWORD`、`SMTP_FROM_EMAIL` 换成服务商提供的值，删掉 mailpit 服务。真实密码放在 `.env` 或容器编排平台注入的 secret 里，不写进 compose 文件。
 
 ## 可选：接入 Keycloak OIDC
 

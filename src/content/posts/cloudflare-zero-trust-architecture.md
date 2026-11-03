@@ -117,7 +117,7 @@ flowchart LR
 | **Settings → WARP Client** | 客户端部署、模式、根证书 | 出站：客户端 |
 | **My Team → Devices / Users** | 已注册设备、seat 占用 | 全局：清点 |
 
-菜单名称会随 Dashboard 改版变化，需要记住的是菜单项对应哪条数据流，而不是具体路径。
+菜单名称会随 Dashboard 改版变化；比具体路径更稳定的是菜单项对应的数据流。
 
 ## Access：应用访问控制
 
@@ -171,7 +171,7 @@ Access 也支持机器对机器的认证，免去交互式登录：
 
 Access 支持多种登录方式：IdP、一次性 PIN（OTP）、服务令牌等。OTP 是给没有 IdP 的零散用户准备的——输入邮箱，收到验证码，通过。
 
-> ⚠️ 坑：如果 Allow 策略写成 `Include: Login Methods = One-time PIN` 并且对所有有效邮箱开放，等于对任何能收信的人放行。OTP 只验证"邮箱可达"，不验证"邮箱是你的"。用 OTP 时务必叠加其他条件，比如 IP 范围或设备状态。
+> ⚠️ 坑：如果 Allow 策略写成 `Include: Login Methods = One-time PIN` 并且对所有有效邮箱开放，等于对任何能收信的人放行。OTP 只验证"邮箱可达"，不验证"邮箱是你的"。只开 OTP 时，策略还需要叠加 IP 范围或设备状态等条件。
 
 ### 会话与设备 posture
 

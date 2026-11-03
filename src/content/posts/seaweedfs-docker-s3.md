@@ -145,8 +145,8 @@ services:
 - `-volumeSizeLimitMB=1024` 把单卷上限压到 1 GB，适合演示和小数据量。默认值更大，写满后才会申请新卷，小机器上没必要一上来就占很大。
 - `-max=32` 是 volume 进程允许的总卷数。这个值太小会直接卡死新桶的首次写入，后文「常见问题」会细说。一开始写 `-max=8`，volume 启动时预建了 7 个空卷，建完第二个桶就没有可写卷了。
 - `-defaultReplication=000` 表示不做副本。单机没有第二块盘可放副本，写了 `001` 也只会让写入失败。
-- `WEED_JWT_FILER_SIGNING_KEY` 只注入 `s3` 和 `admin`。没有它，s3 启动日志会打 `Failed to load IAM configuration: no signing key found for STS service`，动态 IAM 直接不启用；静态身份仍然可用，所以很容易误判成「配置没错，只是权限不对」。`filer` 不要注入同一个变量：按上游的说明，那会打开 filer 写入侧的 JWT 校验，平白多一层失败面。示例里的密钥是随机串，生产环境请换掉。
-- admin 从 4.46 起对非 loopback 绑定要求鉴权。示例里直接写了用户名密码，生产环境请改成 `.env` 或 Docker secret，不要把密码提交进仓库。
+- `WEED_JWT_FILER_SIGNING_KEY` 只注入 `s3` 和 `admin`。没有它，s3 启动日志会打 `Failed to load IAM configuration: no signing key found for STS service`，动态 IAM 直接不启用；静态身份仍然可用，所以很容易误判成「配置没错，只是权限不对」。`filer` 不要注入同一个变量：按上游的说明，那会打开 filer 写入侧的 JWT 校验，平白多一层失败面。示例里的密钥是随机串，生产环境需要换成自己的值。
+- admin 从 4.46 起对非 loopback 绑定要求鉴权。示例里直接写了用户名密码；生产环境改用 `.env` 或 Docker secret，密码不进入仓库。
 
 `docker compose up -d` 之后，五个容器都应该进入 healthy：
 
@@ -310,7 +310,7 @@ delete: s3://app-data/hello.txt
 两个容易忽略的运维细节：
 
 - `s3:Admin` 只覆盖 IAM 管理面（建 user、策略、ServiceAccount），**不包含** `GetObject`/`PutObject`。只给 `Admin` 的身份读不到对象，这是策略问题，不是配置问题。
-- 网关的 IAM 写接口默认只读。直接用 `aws iam create-user` 会返回 `AccessDenied: IAM write operations are disabled on this server`。所有写操作走 `weed shell`，不要在这条路上浪费时间。
+- 网关的 IAM 写接口默认只读。直接用 `aws iam create-user` 会返回 `AccessDenied: IAM write operations are disabled on this server`。所有写操作走 `weed shell`。
 
 删身份时记得两层都处理。用一个临时 user 验证过：`s3.user.delete` 之后，它名下的 ServiceAccount 仍然出现在 `s3.serviceaccount.list` 里，只是父 user 不存在了；要用 `s3.serviceaccount.delete -id=sa:<user>:<随机串>` 单独清掉。反过来，删 ServiceAccount 也不会影响 user。
 
@@ -343,7 +343,7 @@ aws --endpoint-url http://127.0.0.1:19333 s3api get-bucket-lifecycle-configurati
 printf 'lock\ns3.clean.uploads -timeAgo=24h\n' | docker exec -i sw-demo-filer-1 weed shell -master=master:9333 -filer=filer:8888
 ```
 
-它会列出并 purge 超过指定时间的未完成上传目录。用 `-timeAgo=0m` 强制清过一个刚创建的分片上传，`list-multipart-uploads` 随后返回空，说明这条路径是通的。生产上把 `-timeAgo=24h` 放进每日 cron 即可，不要用 0。
+它会列出并 purge 超过指定时间的未完成上传目录。用 `-timeAgo=0m` 强制清过一个刚创建的分片上传，`list-multipart-uploads` 随后返回空，说明这条路径是通的。生产上把 `-timeAgo=24h` 放进每日 cron；`0` 会连刚创建的分片上传一起清掉。
 
 需要说明的是，生命周期的**实际删除**是服务端按天执行的任务，不是分钟级。验证过规则的写入、回读和手动清理，没有等一天去观察过期对象被自动删掉；如果你要验证，建议用一个短前缀、可丢弃的对象，并预留至少一个扫描周期。
 
@@ -370,7 +370,7 @@ printf 'lock\ns3.bucket.versioning -enable -name app-data\n' | docker exec -i sw
 
 `master` 和 `filer` 的元数据是两套东西，不能只备份其中一个。只恢复 volume、不恢复 filer，卷文件还在，但桶和对象 key 的对应关系没了；只恢复 filer、不恢复 volume，桶能列出来，读对象会失败。稳妥的做法是停掉写入（`docker compose stop s3 admin`），对 `./data` 整体做一次文件系统快照或 `restic`/`borg` 备份，再启动。恢复时四个目录一起回到同一个时间点，不要混用不同日期的备份。
 
-`-defaultReplication=000` 意味着没有任何副本。单块盘坏了就是数据没了，备份必须落在另一块盘或另一台机器上。这一点不要因为「S3 听起来很可靠」而忽略：协议兼容不等于存储有冗余。
+`-defaultReplication=000` 意味着没有任何副本。单块盘坏了就是数据没了，备份必须落在另一块盘或另一台机器上。协议兼容不等于存储有冗余。
 
 ## 常见问题
 
@@ -378,13 +378,13 @@ printf 'lock\ns3.bucket.versioning -enable -name app-data\n' | docker exec -i sw
 
 **首次写入报 `InternalError`，日志里是 `no writable volumes`。** volume 的 `-max` 用完了。volume 启动时会预建一批空卷，master 也会在后台按 collection 补卷；`-max=8` 时启动就占掉 7 个，建第二个桶后没有余量。把 `-max` 调大并重启 volume，再重试；如果调大后仍然没有可写卷，检查 volume 是否真的注册到了 master。
 
-**执行 `s3.policy.create` 报 unknown command。** 4.5x 已经删掉这个命令。用 `s3.policy -put -name=... -file=...`，并且记住是整份覆盖。不同小版本的 shell 命令会增删，拿不准时先 `help | grep s3.` 枚举，不要凭记忆拼。
+**执行 `s3.policy.create` 报 unknown command。** 4.5x 已经删掉这个命令。用 `s3.policy -put -name=... -file=...`，并且是整份覆盖。不同小版本的 shell 命令会增删，拿不准时先 `help | grep s3.` 枚举。
 
 **改了 `s3.json` 但新身份不生效。** 网关只在启动和 `SIGHUP` 时重读。`docker exec sw-demo-s3-1 kill -HUP 1` 之后再试。动态 IAM 的用户和策略不受影响。
 
 **重启后桶和用户都没了。** 九成是 bind mount 路径不对。`docker compose config` 看最终挂载，确认 `./data/*` 落在 compose 文件所在目录，而不是容器内的匿名卷。用 `docker compose down` 而不是 `down -v`，后者会连命名卷一起删。
 
-**`s3.config.show` 显示 Policies: 0，但策略明明存在。** 这个摘要的计数不可靠，以 `s3.policy -list` 为准。同理，排查身份时不要只看摘要，`s3.user.show` 和 `s3.iam.export` 更直接。
+**`s3.config.show` 显示 Policies: 0，但策略明明存在。** 这个摘要的计数不可靠，以 `s3.policy -list` 为准。同理，排查身份时 `s3.user.show` 和 `s3.iam.export` 比摘要更直接。
 
 **AWS CLI 报签名错误或连接被拒。** 先确认 `--endpoint-url` 指向 `http://127.0.0.1:19333`，region 随便填 `us-east-1` 即可；再设置 path-style。SeaweedFS 默认不启用 virtual-host 风格，桶名不会被拼进域名。
 

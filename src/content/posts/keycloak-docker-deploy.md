@@ -165,7 +165,7 @@ Realm settings 的 General 页可以核对名称、显示名和 Require SSL。�
 
 ![](./images/keycloak-docker-deploy-3.png)
 
-realm 建好后，建议立刻做三件事：在 Authentication → Policies 里打开暴力破解检测；在 Realm settings → Login 里关闭用户自助注册（除非你确实需要）；给管理员账号单独设一个强口令，不要和普通用户共用。
+realm 建好后还有三件安全配置：Authentication → Policies 的暴力破解检测；Realm settings → Login 的用户自助注册默认关闭（确实需要时再开）；管理员账号使用单独的强口令，不和普通用户共用。
 
 ## 反向代理与 HTTPS
 

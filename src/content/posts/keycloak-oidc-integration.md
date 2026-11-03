@@ -37,7 +37,7 @@ curl -s https://auth.example.com/realms/homelab/.well-known/openid-configuration
 
 判断方法只有一条：从**下游服务所在的网络位置**执行上面的 curl，看 `issuer` 是不是浏览器实际访问的那个地址。在 Docker Compose 里，这意味着要区分两个视角：浏览器用 `https://auth.example.com`，容器之间可以用 `http://keycloak:8080` 换 token，但 discovery 返回的 `issuer` 必须仍然是外部地址。这靠的是 Keycloak 侧的 `KC_HOSTNAME` 固定值，而不是请求头。
 
-还有一个容易被忽略的细节：下游服务通常会在启动时拉一次 discovery，并把 JWKS 缓存起来。换域名、换证书或重建 realm 之后，旧进程里缓存的公钥和 issuer 可能仍然有效，表现为「配置已经改对了，服务还是报签名错误」。遇到这种情况先重启下游，再判断是不是 Keycloak 的问题。反过来，如果你在调试 issuer，也不要只改浏览器地址——服务端的 discovery 结果才是它实际信任的那一份。
+还有一个容易被忽略的细节：下游服务通常会在启动时拉一次 discovery，并把 JWKS 缓存起来。换域名、换证书或重建 realm 之后，旧进程里缓存的公钥和 issuer 可能仍然有效，表现为「配置已经改对了，服务还是报签名错误」。遇到这种情况先重启下游，再判断是不是 Keycloak 的问题。反过来，调试 issuer 时只改浏览器地址没有用——服务端的 discovery 结果才是它实际信任的那一份。
 
 ## 创建 Client：先选对类型
 
@@ -80,7 +80,7 @@ client ID 一旦被下游写进配置，就不要改。它同时出现在授权�
 2. **端口不一致。** 本地测试时服务跑在 `13001`，client 里填了 `3000`。容器内外的端口是两回事，回调地址以**浏览器地址栏**为准。
 3. **结尾斜杠。** `/callback` 和 `/callback/` 是两个不同的 URI，不会自动归一化。
 
-最可靠的做法不是照文档抄，而是打开下游服务的登录页，点一次 OIDC 登录，从地址栏或开发者工具的网络面板里复制 `redirect_uri` 参数，逐字填进 Keycloak。各服务的文档经常落后于实现，浏览器实际发出的那一跳才是真相。
+更可靠的做法是打开下游服务的登录页，点一次 OIDC 登录，从地址栏或开发者工具的网络面板里复制 `redirect_uri` 参数，逐字填进 Keycloak。各服务的文档经常落后于实现，浏览器实际发出的那一跳才是真相。
 
 Grafana 的 client 详情如下，Root URL、Home URL 和回调都指向 `http://localhost:13001`，与浏览器访问地址一致：
 
@@ -114,7 +114,7 @@ Keycloak 默认**不发** `groups` claim。这不是配置漏了，而是设计�
 
 **第三步，处理 audience。** 有些下游会校验 `aud` 必须包含自己的 client ID。Keycloak 默认把 `aud` 设成 `account` 或请求方，未必符合预期。在 client 的 Dedicated scopes → Mappers 里加一个 Audience mapper，把目标 client ID 写进 Included Client Audience；或者在共享 scope 上做同样的事。只有下游明确报 `invalid audience` 时才需要，不要预先给所有 client 加。
 
-验证不要靠猜。Admin Console → Clients → `grafana` → Client scopes → Evaluate，选一个用户，点 Generated ID token，应该看到：
+验证以 Admin Console → Clients → `grafana` → Client scopes → Evaluate 生成的实际 token 为准。选一个用户，点 Generated ID token，应该看到：
 
 ```json
 "groups": ["admins"]
@@ -196,4 +196,4 @@ Keycloak 侧对应四项配置：client ID `grafana`、Client authentication 打
 
 接一个服务，实际只需要确认四件事：回调地址逐字一致、client 类型选对、`groups` scope 挂上且 `full.path` 关闭、登出地址登记。剩下的错误大多可以归到 issuer 或信任库这两个根因上。
 
-下一篇处理长期运行才会暴露的问题：Passkey 怎么开、realm 邮件怎么配、登录页怎么改，以及升级和安全加固时该守住哪些底线。
+下一篇处理长期运行才会暴露的问题：Passkey 怎么开、realm 邮件怎么配、登录页怎么改，以及升级和安全加固时的几个关键点。
