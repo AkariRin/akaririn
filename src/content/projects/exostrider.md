@@ -23,10 +23,12 @@ link:
 
 隧者：TypeScript 事件驱动框架，内置装饰器路由、服务生命周期编排、会话状态机、客户端池管理、消息与命令解析、env 配置中心与结构化日志
 
-![NPM Version](https://img.shields.io/npm/v/%40aemeath-projects%2Fexostrider?style=for-the-badge)
-![CI Status](https://img.shields.io/github/actions/workflow/status/aemeath-projects/exostrider/publish.yml?style=for-the-badge)
-![Codecov](https://img.shields.io/codecov/c/github/aemeath-projects/exostrider?style=for-the-badge)
-![License](https://img.shields.io/github/license/aemeath-projects/exostrider?style=for-the-badge)
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.5rem;margin:1rem 0">
+  <img src="https://img.shields.io/npm/v/%40aemeath-projects%2Fexostrider?style=for-the-badge" alt="NPM Version" style="margin:0" />
+  <img src="https://img.shields.io/github/actions/workflow/status/aemeath-projects/exostrider/publish.yml?style=for-the-badge" alt="CI Status" style="margin:0" />
+  <img src="https://img.shields.io/codecov/c/github/aemeath-projects/exostrider?style=for-the-badge" alt="Codecov" style="margin:0" />
+  <img src="https://img.shields.io/github/license/aemeath-projects/exostrider?style=for-the-badge" alt="License" style="margin:0" />
+</div>
 
 **Exostrider** | 隧者 是一个平台无关的事件驱动框架库，专为构建基于装饰器的消息处理系统而设计。
 

@@ -20,10 +20,12 @@ link:
 
 骰娘规则引擎——掷骰、CoC/D&D 判定、人物生成、日志状态机，纯函数，双端可用。
 
-![NPM Version](https://img.shields.io/npm/v/%40aemeath-projects%2Ftrpg?style=for-the-badge)
-![CI Status](https://img.shields.io/github/actions/workflow/status/aemeath-projects/trpg/publish.yml?style=for-the-badge)
-![Codecov](https://img.shields.io/codecov/c/github/aemeath-projects/trpg?style=for-the-badge)
-![License](https://img.shields.io/github/license/aemeath-projects/trpg?style=for-the-badge)
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.5rem;margin:1rem 0">
+  <img src="https://img.shields.io/npm/v/%40aemeath-projects%2Ftrpg?style=for-the-badge" alt="NPM Version" style="margin:0" />
+  <img src="https://img.shields.io/github/actions/workflow/status/aemeath-projects/trpg/publish.yml?style=for-the-badge" alt="CI Status" style="margin:0" />
+  <img src="https://img.shields.io/codecov/c/github/aemeath-projects/trpg?style=for-the-badge" alt="Codecov" style="margin:0" />
+  <img src="https://img.shields.io/github/license/aemeath-projects/trpg?style=for-the-badge" alt="License" style="margin:0" />
+</div>
 
 ## 这是什么
 

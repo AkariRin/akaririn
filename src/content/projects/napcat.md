@@ -18,11 +18,13 @@ link:
 
 NapCat / OneBot 11 TypeScript SDK. 提供对 NapCat 的完整 TypeScript 封装，支持四种连接方式，支持 tree-shaking
 
-![NPM Version](https://img.shields.io/npm/v/%40aemeath-projects%2Fnapcat?style=for-the-badge)
-![NapCat Version](https://img.shields.io/badge/napcat-4.18.41-pink?style=for-the-badge)
-![CI Status](https://img.shields.io/github/actions/workflow/status/aemeath-projects/napcat/publish.yml?style=for-the-badge)
-![Codecov](https://img.shields.io/codecov/c/github/aemeath-projects/napcat?style=for-the-badge)
-![License](https://img.shields.io/github/license/aemeath-projects/napcat?style=for-the-badge)
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.5rem;margin:1rem 0">
+  <img src="https://img.shields.io/npm/v/%40aemeath-projects%2Fnapcat?style=for-the-badge" alt="NPM Version" style="margin:0" />
+  <img src="https://img.shields.io/badge/napcat-4.18.41-pink?style=for-the-badge" alt="NapCat Version" style="margin:0" />
+  <img src="https://img.shields.io/github/actions/workflow/status/aemeath-projects/napcat/publish.yml?style=for-the-badge" alt="CI Status" style="margin:0" />
+  <img src="https://img.shields.io/codecov/c/github/aemeath-projects/napcat?style=for-the-badge" alt="Codecov" style="margin:0" />
+  <img src="https://img.shields.io/github/license/aemeath-projects/napcat?style=for-the-badge" alt="License" style="margin:0" />
+</div>
 
 ## 安装
 

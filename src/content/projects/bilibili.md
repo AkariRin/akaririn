@@ -17,10 +17,12 @@ link:
 
 B站 TypeScript SDK，支持 tree-shaking，按需导入
 
-![NPM Version](https://img.shields.io/npm/v/%40aemeath-projects%2Fbilibili?style=for-the-badge)
-![CI Status](https://img.shields.io/github/actions/workflow/status/aemeath-projects/bilibili/publish.yml?style=for-the-badge)
-![Codecov](https://img.shields.io/codecov/c/github/aemeath-projects/bilibili/master?style=for-the-badge)
-![License](https://img.shields.io/github/license/aemeath-projects/bilibili?style=for-the-badge)
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.5rem;margin:1rem 0">
+  <img src="https://img.shields.io/npm/v/%40aemeath-projects%2Fbilibili?style=for-the-badge" alt="NPM Version" style="margin:0" />
+  <img src="https://img.shields.io/github/actions/workflow/status/aemeath-projects/bilibili/publish.yml?style=for-the-badge" alt="CI Status" style="margin:0" />
+  <img src="https://img.shields.io/codecov/c/github/aemeath-projects/bilibili/master?style=for-the-badge" alt="Codecov" style="margin:0" />
+  <img src="https://img.shields.io/github/license/aemeath-projects/bilibili?style=for-the-badge" alt="License" style="margin:0" />
+</div>
 
 ## 免责声明
 

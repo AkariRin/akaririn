@@ -16,8 +16,10 @@ link:
 
 鸣潮字体库
 
-![NPM Version](https://img.shields.io/npm/v/%40aemeath-projects%2Fwuwa-fonts?style=for-the-badge)
-![License](https://img.shields.io/github/license/aemeath-projects/wuwa-fonts?style=for-the-badge)
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.5rem;margin:1rem 0">
+  <img src="https://img.shields.io/npm/v/%40aemeath-projects%2Fwuwa-fonts?style=for-the-badge" alt="NPM Version" style="margin:0" />
+  <img src="https://img.shields.io/github/license/aemeath-projects/wuwa-fonts?style=for-the-badge" alt="License" style="margin:0" />
+</div>
 
 ## 快速安装
 

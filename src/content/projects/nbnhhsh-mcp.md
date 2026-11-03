@@ -17,9 +17,11 @@ link:
 [「能不能好好说话？」](https://lab.magiconch.com/nbnhhsh/) 的 MCP Server，
 为 LLM 客户端提供中文互联网拼音首字母缩写的候选释义。
 
-![NPM Version](https://img.shields.io/npm/v/%40aemeath-projects%2Fnbnhhsh-mcp?style=for-the-badge)
-![CI Status](https://img.shields.io/github/actions/workflow/status/aemeath-projects/nbnhhsh-mcp/publish.yml?style=for-the-badge)
-![License](https://img.shields.io/github/license/aemeath-projects/nbnhhsh-mcp?style=for-the-badge)
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:0.5rem;margin:1rem 0">
+  <img src="https://img.shields.io/npm/v/%40aemeath-projects%2Fnbnhhsh-mcp?style=for-the-badge" alt="NPM Version" style="margin:0" />
+  <img src="https://img.shields.io/github/actions/workflow/status/aemeath-projects/nbnhhsh-mcp/publish.yml?style=for-the-badge" alt="CI Status" style="margin:0" />
+  <img src="https://img.shields.io/github/license/aemeath-projects/nbnhhsh-mcp?style=for-the-badge" alt="License" style="margin:0" />
+</div>
 
 ## 特性
 
